@@ -27,6 +27,8 @@ isoContourFilter=itk.IsoContourDistanceImageFilter.New(antialias_image)
 
 isoContourFilter.SetLevelSetValue(0.1)
 
+isoContourFilter.SetFarValue(100) #make sure this is greater than your max distance value for the chamfer filter
+
 isoContourFilter.SetInput(antialias_image)
 
 isoContourFilter.Update()
@@ -39,7 +41,7 @@ chamferFilter=itk.FastChamferDistanceImageFilter.New(isoContour_image)
 
 print(chamferFilter.GetMaximumDistance())
 
-chamferFilter.SetMaximumDistance(100.0)
+chamferFilter.SetMaximumDistance(50.0)
 
 print(chamferFilter.GetMaximumDistance())
 
