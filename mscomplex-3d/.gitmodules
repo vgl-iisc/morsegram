@@ -1,0 +1,3 @@
+[submodule "pyms3d/Boost.Numpy"]
+	path = pyms3d/Boost.Numpy
+	url = https://github.com/ndarray/Boost.NumPy.git
