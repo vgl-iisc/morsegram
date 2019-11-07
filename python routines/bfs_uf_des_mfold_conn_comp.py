@@ -3,13 +3,23 @@ import itertools
 import numpy as np
 from collections import defaultdict
 from python_algorithms.basic.union_find import UF
+import argparse
+
+parser=argparse.ArgumentParser()
+
+parser.add_argument('data_file',type=str,help='data file name')
+parser.add_argument('dim',nargs=3,type=int,help='dimensions')
+args=parser.parse_args()
+
+msc_file_name=args.data_file
+dim = list(args.dim)
 
 msc=pyms3d.mscomplex()
-msc_file_name='msc_chan_vese_chamf_distance_pers_2.0'
+#msc_file_name='msc_chan_vese_chamf_distance_pers_2.0'
 #msc.load('msc_otsu_Depositional_Steel_Air_downsampled_mean_213_256_251_pers_2.0')
 #msc.load('msc_chamfer_dist_pers_2.0')
-msc.load('msc_chan_vese_chamf_distance_pers_2.0')
-dim=[251,256,213]
+msc.load(msc_file_name)
+#dim=[251,256,213]
 x_max=dim[0]-1
 y_max=dim[1]-1
 z_max=dim[2]-1
@@ -68,7 +78,7 @@ def get_nbs_cell_id(cell_id):
 		inc=(arr[0]+x_max*arr[1]+y_max*x_max*arr[2])
 		if((cell_id+inc)>0 and (cell_id+inc)<x_max*y_max*z_max):
 			nbd_list.append(cell_id+inc)
-	return nbd_list	
+	return nbd_list
 
 def get_sad_facs(sad_id):
 	sad_pt=[x/2.0 for x in msc.cp_cellid(sad_id)]
@@ -95,8 +105,8 @@ def get_saddle_cofac_cell_id(s):
 	cofac_arr=[]
 	int_dual_pt=[x/2 for x in msc.cp_cellid(s)]
 	cell_id=int_dual_pt[0]+(x_max)*int_dual_pt[1]+(y_max)*(x_max)*int_dual_pt[2]
-	dual_pt=[x/2.0 for x in msc.cp_cellid(s)]	
-	for i in range(3):	
+	dual_pt=[x/2.0 for x in msc.cp_cellid(s)]
+	for i in range(3):
 		if(dual_pt[i]%1==0):
 			if(i==0):
 				cofac_arr.append(cell_id+1)
@@ -136,7 +146,7 @@ def uf_add_node(node,elem,uf_struct,uf_id_dict):
 		uf_add(uf_struct)
 		uf_struct.union(uf_id_dict[elem],uf_id_dict[node])
 	return uf_struct
-	
+
 
 def bfs_intersection_ids(m1,m2,uf_id_dict):
 	visited=[]
@@ -159,7 +169,7 @@ def bfs_intersection_ids(m1,m2,uf_id_dict):
 		node=queue.pop(0)
 		if node not in explored:
 			explored.add(node)
-			neighbours=get_nbs_cell_id(node)			
+			neighbours=get_nbs_cell_id(node)
 			for neighbour in neighbours:
 				if(check_bd_cell_id(neighbour,mfold_1,mfold_2,min_sad_val)):
 					queue.append(neighbour)
@@ -194,7 +204,7 @@ for key in max_conn_dict.keys():
 		if(check_sad_inside(sad)==False):
 			max_conn_dict[key].remove(sad)
 	#print(len(max_conn_dict[key]))
-		
+
 for key in max_conn_dict.keys():
 	sad_list=max_conn_dict[key]
 	if(len(sad_list)>1):
@@ -206,7 +216,7 @@ for key in max_conn_dict.keys():
 	for sad in max_conn_dict[key]:
 		surviving_sads.add(sad)
 
-np.savetxt('surviving_sads'+msc_file_name,list(surviving_sads))
+np.savetxt('surviving_sads_'+msc_file_name,list(surviving_sads))
 
 for key in max_conn_dict.keys():
 	sad_count=len(max_conn_dict[key])
@@ -219,6 +229,4 @@ for key in max_conn_dict.keys():
 			if(comp_count>1):
 				print(key)
 				print(max_conn_dict[key])
-				print(comp_count)				
-		
-		
+				print(comp_count)
