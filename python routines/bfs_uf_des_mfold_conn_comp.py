@@ -15,11 +15,7 @@ msc_file_name=args.data_file
 dim = list(args.dim)
 
 msc=pyms3d.mscomplex()
-#msc_file_name='msc_chan_vese_chamf_distance_pers_2.0'
-#msc.load('msc_otsu_Depositional_Steel_Air_downsampled_mean_213_256_251_pers_2.0')
-#msc.load('msc_chamfer_dist_pers_2.0')
 msc.load(msc_file_name)
-#dim=[251,256,213]
 x_max=dim[0]-1
 y_max=dim[1]-1
 z_max=dim[2]-1
@@ -39,7 +35,7 @@ for s in cps_2sad:
             	max_conn_dict[tuple(pair)].append(s)
 
 def check_bd_cell_id(cell_id,mfold_1,mfold_2,min_sad_val):
-	allowed_thresh=max(0,min_sad_val-0.01)
+	allowed_thresh=max(0,min_sad_val-0.01) # TODO: Should be 0 ideally to make the most sense
 	nb_list=[]
 	inc_arr=[1,x_max,y_max*x_max]
 	if(cell_id not in mfold_1):
@@ -218,15 +214,15 @@ for key in max_conn_dict.keys():
 
 np.savetxt('surviving_sads_'+msc_file_name,list(surviving_sads))
 
-for key in max_conn_dict.keys():
-	sad_count=len(max_conn_dict[key])
-	if(sad_count>1):
-		for sad in max_conn_dict[key]:
-			if(check_sad_inside(sad)!=True):
-				sad_count-=1
-		if(sad_count>1):
-			comp_count=bfs_intersection_ids(key[0],key[1])
-			if(comp_count>1):
-				print(key)
-				print(max_conn_dict[key])
-				print(comp_count)
+# for key in max_conn_dict.keys():
+# 	sad_count=len(max_conn_dict[key])
+# 	if(sad_count>1):
+# 		for sad in max_conn_dict[key]:
+# 			if(check_sad_inside(sad)!=True):
+# 				sad_count-=1
+# 		if(sad_count>1):
+# 			comp_count=bfs_intersection_ids(key[0],key[1])
+# 			if(comp_count>1):
+# 				print(key)
+# 				print(max_conn_dict[key])
+# 				print(comp_count)

@@ -1,5 +1,6 @@
 import pyms3d
 import numpy as np
+
 msc=pyms3d.mscomplex()
 msc_file_name='msc_chan_vese_chamf_distance_pers_0.0'
 msc.load(msc_file_name)
@@ -20,4 +21,3 @@ for m in cps_max:
 
 np.savetxt('pers_diagm_data_'+msc_file_name,p_diagm_list)
 np.savetxt('pers_diagm_csv_'+msc_file_name+'.csv',p_diagm_list,delimiter=',')
-

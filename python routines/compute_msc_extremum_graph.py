@@ -2,7 +2,7 @@ import pyms3d
 import vtk.util.numpy_support as nps
 import numpy as np
 import vtk
-import os 
+import os
 import argparse
 
 parser=argparse.ArgumentParser()
@@ -34,27 +34,7 @@ msc_file_name='msc_'+ base_name + '_pers_'+str(percent_pers)
 
 print(output_poly_data_file_name)
 
-#data info
-#DataFile = "/home/tbmasood/saurabh data/1p_300_smooth_sub.raw"
-#DataFile = "/home/tbmasood/saurabh data/1p_300_distField_150_sub.raw"
-#Dim      = (419,412,151)
 DataFile = data_file_name
-
-
-#field = np.fromfile(DataFile,"<f4")
-#pfa=vtk.vtkFloatArray()
-#pfa.SetName("DistField")
-
-#for z in range(0, Dim[2]-1):
-#    for y in range(0, Dim[1]-1):
-#        for x in range(0, Dim[0]-1):
-#            index = Dim[1]*Dim[0]*z + Dim[0]*y + x
-#            pfa.InsertNextValue(field[index])
-
-
-
-    # compute the mscomplex simplify and collect the 
-    # ascending geometry of 2 saddles
 
 msc_computed=0
 
@@ -78,10 +58,6 @@ pa = vtk.vtkPoints()
 pa.SetData(nps.numpy_to_vtk(dp,"Pts"))
 
 cps_2sad = msc.cps(2)
-#cps_2sad = [cps_2sad[i] for i in [0,1,3]]
-
-#put the list in cache 
-#setattr(pyms3d,"cps_2sad",cps_2sad)
 
 # create a vtk CellArray for the line segments
 ca = vtk.vtkCellArray()
@@ -123,5 +99,3 @@ if vtk.VTK_MAJOR_VERSION <= 5:
 else:
     writer.SetInputData(pd)
 writer.Write()
-
-
