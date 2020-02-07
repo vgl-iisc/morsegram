@@ -4,24 +4,33 @@ import numpy as np
 from collections import defaultdict
 from python_algorithms.basic.union_find import UF
 import math
+import pickle
+import argparse
+
+parser=argparse.ArgumentParser()
+parser.add_argument('data_file',type=str,help='data file name')
+parser.add_argument('dim',nargs=3,type=int,help='dimensions')
+parser.add_argument('output_path',type=str,help='output file path')
+
+args=parser.parse_args()
+msc_file_name=args.data_file
+dim = list(args.dim)
+output_path_name=args.output_path
 
 msc=pyms3d.mscomplex()
-msc_file_name='msc_chan_vese_chamf_distance_pers_2.0'
-#msc.load('msc_otsu_Depositional_Steel_Air_downsampled_mean_213_256_251_pers_2.0')
-#msc.load('msc_chamfer_dist_pers_2.0')
 msc.load(msc_file_name)
 msc.collect_geom(dim=3,dir=0)
 cps_2sad=msc.cps(2)
-dim=[251,256,213]
 x_max=dim[0]-1
 y_max=dim[1]-1
 z_max=dim[2]-1
 dual_pts=msc.dual_points()
 
+particle_segmentation=[]
 
-surv_sads=np.loadtxt('surviving_sads'+msc_file_name)
+surv_sads=np.loadtxt(output_path_name+'surviving_sads')
 
-def get_cube_max_val(dual_pt):
+def get_cube_max_val(dual_pt): #actually min val
 	inc_arr=list(itertools.product([0.5,-0.5],repeat=3))
 	max_val=100
 	#flag=0
@@ -41,8 +50,9 @@ def get_des_vol(max_id):
 	for cube_id in des_geom:
 		if(get_cube_max_val(dual_pts[cube_id])>0):
 			count+=1
+			particle_segmentation.append(np.append(dual_pts[cube_id],(max_id)))
 	return count
-	
+
 def dia_from_vol(vol):
 	dia=(vol*3.0)/(4.0*math.pi)
 	dia=dia**(1/3.0)
@@ -63,6 +73,8 @@ def get_cnum_max(max_id):
 	return count
 
 max_data_array=[]
+max_data_dict=defaultdict(list)
+
 for i in range(len(cps_max)):
 	max_id=cps_max[i]
 	curr_max_data=[]
@@ -74,8 +86,11 @@ for i in range(len(cps_max)):
 	curr_max_data.append(vol)
 	curr_max_data.append(dia)
 	curr_max_data.append(c_num)
-	curr_max_data.append(max_id)	
+	max_data_dict[max_id]=curr_max_data
+	curr_max_data.append(max_id)
 	max_data_array.append(curr_max_data)
 
-np.savetxt('max_data_array_'+msc_file_name,max_data_array)
-
+dict_file=open("max_data_dict.pkl","wb")
+pickle.dump(max_data_dict,dict_file)
+np.savetxt(output_path_name+'max_data_array',max_data_array)
+np.savetxt(output_path_name+'segmentation',particle_segmentation)
