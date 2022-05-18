@@ -6,8 +6,9 @@ This repository contains the code for discrete Morse theory based segmentation
 of three dimensional X-ray computed tomography data of (cemented)
 granular/discrete material systems.
 
-(e-mail: karran13@gmail.com)
-(e-mail: saurabhsingh@alum.iisc.ac.in)
+e-mail: karran13@gmail.com
+
+e-mail: saurabhsingh@alum.iisc.ac.in
 
 ---
 ## Requirements
@@ -43,18 +44,18 @@ instruction of pyms3d are as follows:
 * Clone the repository
 
 ```sh
-git clone https://github.com/karran13/Granular-Material-Packing-Analysis
+git clone repository_address
 ```
 
- * Navigate to mscomplex-3d, create build and install directories
+* Navigate to mscomplex-3d, create build and install directories
 
  ```sh
- cd Granular-Material-Packing-Analysis/ms\ complex\ software/mscomplex-3d/
+ cd bead-network-computation/ms\ complex\ software/mscomplex-3d/
  mkdir build install
  cd build
  ```
 
- * Build pyms3d using cmake-gui
+* Build pyms3d using cmake-gui
 
  ```sh
  cmake-gui
@@ -66,29 +67,27 @@ git clone https://github.com/karran13/Granular-Material-Packing-Analysis
     2. Press configure to see the default values cmake-gui picked up
     3. Use advance option and change the default values to something similar to the following
 
-     ![cmake-gui options](./Extras/cmake-gui.png)
+     ![cmake-gui options](./READMEFiles/cmake-gui.png)
 
     4. Important:
 
-      Check BUILD_PYMS3D, BUILD_TOOL. Press configure to update and display new values.
+      - Check BUILD_PYMS3D, BUILD_TOOL.
+      - Press configure to update and display new values.
+      - Provide path for MSCOMPLEX3D_INSTALL_DIR, opencl cuda paths, libboost paths, python3 paths.
+      - The path to PYTHON_SITE_PACKAGE_DIR should be "Python Routines" in the repository folder.
+      - Click generate and close cmake-gui.
 
-      Provide path for MSCOMPLEX3D_INSTALL_DIR, opencl cuda paths, libboost paths, python3 paths.
-
-      The path to PYTHON_SITE_PACKAGE_DIR should be "Python Routines"
-      in the repository folder.
-      Click generate and close cmake-gui.
-
-  * From the build directory, execute the following commands:
+* From the build directory, execute the following commands:
 
     ```sh
     make -j8
     make -j8 install
     ```
 
-    where 8 is number of processes used to build the pyms3d.
+   Where 8 is number of processes used to build the pyms3d.
 
-  * If everything went alright, you should see 'pyms3d.so' in 'Python Routines' directory.
-  * To check whether your installation works, import pyms3d in ipython or jupyter-lab. If import is successful, your installation works.
+* If everything went alright, you should see 'pyms3d.so' in 'Python Routines' directory.
+* To check whether your installation works, import pyms3d in ipython or jupyter-lab. If import is successful, your installation works.
 
 ### Running the Pipeline
 
