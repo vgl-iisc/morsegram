@@ -62,8 +62,8 @@ git clone repository_address
  ```
 
     1. In the cmake-gui, provide the path for
-        *source code ---> absolute path to mscomplex-3d*
-        *build directory ---> absolute path to mscomplex-3d/build*
+        - source code ---> absolute path to mscomplex-3d
+        - build directory ---> absolute path to mscomplex-3d/build
     2. Press configure to see the default values cmake-gui picked up
     3. Use advance option and change the default values to something similar to the following
 
