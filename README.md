@@ -61,21 +61,21 @@ git clone repository_address
  cmake-gui
  ```
 
-    1. In the cmake-gui, provide the path for
-        - source code ---> absolute path to mscomplex-3d
-        - build directory ---> absolute path to mscomplex-3d/build
-    2. Press configure to see the default values cmake-gui picked up
-    3. Use advance option and change the default values to something similar to the following
+  1. In the cmake-gui, provide the path for
+      - source code ---> absolute path to mscomplex-3d
+      - build directory ---> absolute path to mscomplex-3d/build
+  2. Press configure to see the default values cmake-gui picked up
+  3. Use advance option and change the default values to something similar to the following
 
-     ![cmake-gui options](./READMEFiles/cmake-gui.png)
+   ![cmake-gui options](./READMEFiles/cmake-gui.png)
 
-    4. Important:
+  4. Important:
 
-      - Check BUILD_PYMS3D, BUILD_TOOL.
-      - Press configure to update and display new values.
-      - Provide path for MSCOMPLEX3D_INSTALL_DIR, opencl cuda paths, libboost paths, python3 paths.
-      - The path to PYTHON_SITE_PACKAGE_DIR should be "Python Routines" in the repository folder.
-      - Click generate and close cmake-gui.
+    - Check BUILD_PYMS3D, BUILD_TOOL.
+    - Press configure to update and display new values.
+    - Provide path for MSCOMPLEX3D_INSTALL_DIR, opencl cuda paths, libboost paths, python3 paths.
+    - The path to PYTHON_SITE_PACKAGE_DIR should be "Python Routines" in the repository folder.
+    - Click generate and close cmake-gui.
 
 * From the build directory, execute the following commands:
 
