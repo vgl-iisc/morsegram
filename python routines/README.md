@@ -113,4 +113,5 @@ takes the computed distance field (in .raw format) as input and returns the stru
 Running this will store the selected structures in '.mhd' or '.vtp' format (accessible through VTK/ParaView) in the 'Outputs' folder in the repository.
 
 Few notes here: Use the 'knee' in the persistence curve to select a simplification threshold.
+
 ---
