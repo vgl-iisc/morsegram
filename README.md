@@ -113,6 +113,8 @@ Running this will store the selected structures in '.mhd' or '.vtp' format (acce
 
 Few notes here: Use the 'knee' in the persistence curve to select a simplification threshold.
 
+---
+
 ## References
 
 For more information about the method, refer to the follwoing paper. Please cite these publications if you use this method or the library in your work.
@@ -126,6 +128,7 @@ Granular Matter 24, 27 (2022). https://doi.org/10.1007/s10035-021-01182-7
 
 [[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)
 
+---
 
 ## Copyright
 
