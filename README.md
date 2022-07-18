@@ -1,12 +1,18 @@
-# Segmentation of X-ray CT sand data using Morse complex
-
-## Description
+# Description
 
 This repository contains the code for discrete Morse theory based segmentation
 of three dimensional X-ray computed tomography data of (cemented)
 granular/discrete material systems. The code is based on the method described in the paper: 
 
-[Morse theory-based segmentation and fabric quantification of granular materials](https://link.springer.com/article/10.1007/s10035-021-01182-7)
+Karran Pandey, Talha Bin Masood, Saurabh Singh, Ingrid Hotz, Vijay Natarajan, and Tejas G. Murthy.
+
+Morse theory-based segmentation and fabric quantification of granular materials.
+
+Granular Matter, 24(1), 2022, 27:1-20.
+
+https://doi.org/10.1007/s10035-021-01182-7
+
+[[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)
 
 An earlier version of this repository which was used to obtain the results in the paper can also be found [here](https://github.com/karran13/Granular-Material-Packing-Analysis).
 
@@ -15,7 +21,7 @@ e-mail: karran13@gmail.com
 e-mail: saurabhsingh@alum.iisc.ac.in
 
 ---
-## Requirements
+# Requirements
 
 To compile and execute this code, you will need Cmake > 3.1.8, Boost > 1.58,
 OpenCL 1.1 (implicitly available along with CUDA > 10.1), OpenMP and python
@@ -30,9 +36,9 @@ with the following packages:
 
 ---
 
-## Instructions
+# Instructions
 
-### Prerequisite installation
+## Prerequisite installation
 
 * Install Cmake, Boost using your software package manager
 * If your gpu is Cuda compatible, follow the detailed installation instructions [here](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html). Or install opencl from your software package manager. Check if opencl is working with clinfo. If you get "number of platform 0", it means opencl is not working correctly. Fix the installation of opencl.
@@ -40,7 +46,7 @@ with the following packages:
 * Install python packages, specifically numpy as it will be used for building the pyms3d module.
 * Install cmake-gui for building pyms3d.
 
-### Installing pyms3d
+## Installing pyms3d
 
 The MS-Complex computation is done using pyms3d. The installation
 instruction of pyms3d are as follows:
@@ -93,11 +99,11 @@ git clone repository_address
 * If everything went alright, you should see 'pyms3d.so' in 'Python Routines' directory.
 * To check whether your installation works, import pyms3d in ipython or jupyter-lab. If import is successful, your installation works.
 
-### Running the Pipeline
+## Running the Pipeline
 
 The python scripts to run the pipeline can be found in the Python Routines folder. You should have all the python packages specified above to run the pipeline successfully. The scripts and their input formats are described below:
 
-#### distance_field.py
+### distance_field.py
 
 This script takes as input the raw CT image (multiple formats are to be supported, currently '.mat') and outputs the distance field based on the extracted boundary. To run the script, execute the following command in the terminal:
 
@@ -105,7 +111,7 @@ This script takes as input the raw CT image (multiple formats are to be supporte
 
 This will store the computed distance field in MetaImage format (.mhd + .raw) in the 'ChamferDistance' folder in the repository. Also a raw data file (.mhd + .raw) is stored in the raw data folder.
 
-#### main.py
+### main.py
 
 This script is the main interface to run the Morse-Smale Complex computation
 and extract relevant geometric and topological structures for analysis. It
@@ -119,22 +125,24 @@ Few notes here: Use the 'knee' in the persistence curve to select a simplificati
 
 ---
 
-## References
+# References
 
 For more information about the method, refer to the follwoing paper. Please cite these publications if you use this method or the library in your work.
 
 
-Morse theory-based segmentation and fabric quantification of granular materials 
+Karran Pandey, Talha Bin Masood, Saurabh Singh, Ingrid Hotz, Vijay Natarajan, and Tejas G. Murthy.
 
-Pandey, K., Bin Masood, T., Singh, S. et al. 
+Morse theory-based segmentation and fabric quantification of granular materials.
 
-Granular Matter 24, 27 (2022). https://doi.org/10.1007/s10035-021-01182-7
+Granular Matter, 24(1), 2022, 27:1-20.
+
+https://doi.org/10.1007/s10035-021-01182-7
 
 [[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)
 
 ---
 
-## Copyright
+# Copyright
 
 Copyright (c) 2021 Visualization & Graphics Lab (VGL), Indian Institute of Science. All rights reserved.
 
