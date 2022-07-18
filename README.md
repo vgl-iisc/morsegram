@@ -4,7 +4,11 @@
 
 This repository contains the code for discrete Morse theory based segmentation
 of three dimensional X-ray computed tomography data of (cemented)
-granular/discrete material systems. The code is based on the paper titled 'Morse theory-based segmentation and fabric quantification of granular materials' by Pandey et al.; and an earlier version used to obtain the results in the paper can also be found [here](https://github.com/karran13/Granular-Material-Packing-Analysis).
+granular/discrete material systems. The code is based on the method described in the paper: 
+
+[Morse theory-based segmentation and fabric quantification of granular materials](https://link.springer.com/article/10.1007/s10035-021-01182-7)
+
+An earlier version of this repository which was used to obtain the results in the paper can also be found [here](https://github.com/karran13/Granular-Material-Packing-Analysis).
 
 e-mail: karran13@gmail.com
 
