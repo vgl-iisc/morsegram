@@ -117,18 +117,15 @@ Few notes here: Use the 'knee' in the persistence curve to select a simplificati
 
 For more information about the method, refer to the follwoing paper. Please cite these publications if you use this method or the library in your work.
 
-```
+
 Morse theory-based segmentation and fabric quantification of granular materials 
 
 Pandey, K., Bin Masood, T., Singh, S. et al. 
 
-Granular Matter 24, 27 (2022). 
+Granular Matter 24, 27 (2022). https://doi.org/10.1007/s10035-021-01182-7
 
-DOI: https://doi.org/10.1007/s10035-021-01182-7
+[[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)
 
-Springer Link: https://link.springer.com/article/10.1007/s10035-021-01182-7
-
-```
 
 ## Copyright
 
