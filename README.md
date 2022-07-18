@@ -113,4 +113,41 @@ Running this will store the selected structures in '.mhd' or '.vtp' format (acce
 
 Few notes here: Use the 'knee' in the persistence curve to select a simplification threshold.
 
+## References
+
+For more information about the method, refer to the follwoing paper. Please cite these publications if you use this method or the library in your work.
+
+
+Morse theory-based segmentation and fabric quantification of granular materials [Springer Link](https://link.springer.com/article/10.1007/s10035-021-01182-7)
+
+Pandey, K., Bin Masood, T., Singh, S. et al. 
+
+Granular Matter 24, 27 (2022). https://doi.org/10.1007/s10035-021-01182-7
+
+## Copyright
+
+Copyright (c) 2021 Visualization & Graphics Lab (VGL), Indian Institute of Science. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+Authors   : Karran Pandey, Saurabh Singh
+
+Contact  : karran13@gmail.com , saurabhsingh@alum.iisc.ac.in
+
+
 ---
