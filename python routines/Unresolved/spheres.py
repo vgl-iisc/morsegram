@@ -13,10 +13,17 @@ def getSphere(x,y,z,i,d):
 	return sphere.GetOutput()
 
 def genSphere(x,y,z,r):
+	'''
+	generate sphere
+	@param x,y,z: center
+	@param r: radius
+	@return: sphere
+	'''
 	sphere = vtk.vtkSphereSource()
-	centre=[x,y,z]
-	sphere.SetCenter(centre[0],centre[1],centre[2])
+	sphere.SetCenter(x, y, z)
 	sphere.SetRadius(r)
+	sphere.SetThetaResolution(300)
+	sphere.SetPhiResolution(300)
 	sphere.Update()
 	return sphere.GetOutput()
 
@@ -24,8 +31,10 @@ def genPacking(num_x,num_y,num_z,r,close_frac):
 	sphere_packing=[]
 	for i in range(num_x):
 		for j in range(num_y):
+			temp = 1
 			for k in range(num_z):
-				curr_centre=[2*r*i,2*r*j,2*r*k]
+				curr_centre=[2*r*i, 2*r*j, 2*r*k+temp]
+				temp += 1
 				sphere_packing.append(genSphere(curr_centre[0],curr_centre[1],curr_centre[2],r*close_frac))
 	return sphere_packing	
 
@@ -41,7 +50,7 @@ def init_Spheres():
 
 
 
-spheres=genPacking(1,1,2,15,1.01)
+spheres=genPacking(1,1,2,15,0.9)
 #init_Spheres()
 pd=vtk.vtkPolyData()
 
@@ -71,24 +80,25 @@ pd=appendFilter.GetOutput()
 
 
 whiteImage = vtk.vtkImageData()    
-bounds=pd.GetBounds()
-spacing=[1,1,1]
+bounds = pd.GetBounds()
+spacing = [0.25,0.25,0.25]
 whiteImage.SetSpacing(spacing)
 dim=[0,0,0]
 
 for i in range(3):
-    dim[i] = int((bounds[i * 2 + 1] - bounds[i * 2])/spacing[i])
- 
-whiteImage.SetDimensions(dim);
-whiteImage.SetExtent(0, dim[0] - 1, 0, dim[1] - 1, 0, dim[2] - 1)
+    dim[i] = int((bounds[i * 2 + 1] - bounds[i * 2])/spacing[i]) + 50
 
+print(dim)
+
+whiteImage.SetDimensions(dim)
+whiteImage.SetExtent(0, dim[0] - 1, 0, dim[1] - 1, 0, dim[2] - 1)
 origin=[0,0,0]
 
 origin[0] = bounds[0] + spacing[0] / 2
 origin[1] = bounds[2] + spacing[1] / 2
 origin[2] = bounds[4] + spacing[2] / 2
   
-whiteImage.SetOrigin(origin);
+whiteImage.SetOrigin(origin)
 
 whiteImage.AllocateScalars(vtk.VTK_FLOAT,1)
 
@@ -103,6 +113,12 @@ for i in range(count):
  
 
 pol2stenc = vtk.vtkPolyDataToImageStencil()
+
+appendFilter=vtk.vtkAppendPolyData()
+appendFilter.AddInputData(genSphere(5,5,40,15))
+appendFilter.AddInputData(genSphere(5,5,10,15))
+appendFilter.Update()
+pd=appendFilter.GetOutput()
 
 pol2stenc.SetInputData(pd)
 pol2stenc.SetOutputOrigin(origin)
@@ -120,39 +136,31 @@ imgstenc.Update()
 
 image_data=(imgstenc.GetOutput())
 
-filename = "spheres.vti"
+filename = "touching_spheres"
 
 writer = vtk.vtkXMLImageDataWriter()
-writer.SetFileName(filename)
+writer.SetFileName(filename + ".vti")
 writer.SetInputData(image_data)
 writer.Write()
 
 meta_writer=vtk.vtkMetaImageWriter()
-meta_writer.SetFileName("spheres.mhd")
-meta_writer.SetRAWFileName("spheres.raw")
+meta_writer.SetFileName(filename + ".mhd")
+meta_writer.SetRAWFileName(filename + ".raw")
 meta_writer.SetCompression(False)
 meta_writer.SetInputData(image_data)
 meta_writer.Write()
 
 
 #print("hello")
-
 reader=sitk.ImageFileReader()
 reader.SetImageIO("MetaImageIO")
-reader.SetFileName("spheres.mhd")
-
+reader.SetFileName(filename + ".mhd")
 image=reader.Execute()
 
 thresholdFilter=sitk.BinaryThresholdImageFilter()
-
 thresh_image=thresholdFilter.Execute(image,0,100,1,0)
-
 signedDistFilter=sitk.SignedMaurerDistanceMapImageFilter()
-
 signed_dist_image=signedDistFilter.Execute(thresh_image)
-
 raw_writer = sitk.ImageFileWriter()
-raw_writer.SetFileName("spheres_dist.mhd")
+raw_writer.SetFileName(filename + "_dist.mhd")
 raw_writer.Execute(signed_dist_image)
-
-

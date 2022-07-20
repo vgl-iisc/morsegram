@@ -744,11 +744,11 @@ def get_segmentation_index_dual(msc, img, rtype="VTP"):
     return None
 
 
-def read_mat_file(filename, factor=1):
-    """Read and downsample mat file into numpy array
+def read_input_file(filename, factor=1):
+    """Read and downsample mat/raw file into numpy array
 
     Args:
-        filename (str): Name of mat file with volm array
+        filename (str): Name of raw / mat file with volm array
         factor (int, optional): Downsampling factor. Defaults to 1.
     
     Description:
@@ -759,26 +759,37 @@ def read_mat_file(filename, factor=1):
     Returns:
         numpy array: downsampled array
     """
-    try:
-        # if saved wih -v7.3 flag
-        f = h5py.File(f'{filename}.mat', 'r')
-        sci = False
-    except OSError:
-        # else
-        f = io.loadmat(f'{filename}.mat')
-        sci = True
-    except:
-        print("Something went wrong")
-        raise Exception('Not able to read the mat file.')
+    file_ext = filename.split(".")[-1]
+    if file_ext == "mat":
+        print("reading mat file : " + filename)
+        try:
+            # if saved wih -v7.3 flag
+            f = h5py.File(f'{filename}', 'r')
+            sci = False
+        except OSError:
+            # else
+            f = io.loadmat(f'{filename}')
+            sci = True
+        except:
+            print("Something went wrong")
+            raise Exception('Not able to read the mat file.')
 
-    data = f.get('volm')
-    arr = np.array(data)
-    if sci:
-        arr = np.transpose(arr, axes=[2, 1, 0])
-
+        data = f.get('volm')
+        arr = np.array(data)
+        if sci:
+            arr = np.transpose(arr, axes=[2, 1, 0])
+    elif file_ext == "mhd":
+        print("reading raw file : " + filename)
+        file_reader = sitk.ImageFileReader()
+        file_reader.SetFileName(filename)
+        file_reader.SetImageIO('')
+        image = file_reader.Execute()
+        arr = sitk.GetArrayFromImage(image)
+    print("Original Shape : ", arr.shape)
     if (factor > 1):
         arr = block_reduce(arr, (factor, factor, factor),
                            func=np.mean).astype(np.uint16)
+    print("New Shape : ", arr.shape)
     return arr
 
 
