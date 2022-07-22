@@ -48,8 +48,7 @@ with the following packages:
 
 ## Installing pyms3d
 
-The MS-Complex computation is done using pyms3d. The installation
-instruction of pyms3d are as follows:
+The MS-Complex computation is done using pyms3d. You can either run bash script [here](./build_mscomplex3d.sh) to install pyms3d or the installation instruction of pyms3d are as follows:
 
 * Clone the repository
 
@@ -84,7 +83,7 @@ git clone repository_address
     - Check BUILD_PYMS3D, BUILD_TOOL.
     - Press configure to update and display new values.
     - Provide path for MSCOMPLEX3D_INSTALL_DIR, opencl cuda paths, libboost paths, python3 paths.
-    - The path to PYTHON_SITE_PACKAGE_DIR should be "Python Routines" in the repository folder.
+    - The path to PYTHON_SITE_PACKAGE_DIR should be "python routines" in the repository folder.
     - Click generate and close cmake-gui.
 
 * From the build directory, execute the following commands:
@@ -99,15 +98,32 @@ git clone repository_address
 * If everything went alright, you should see 'pyms3d.so' in 'Python Routines' directory.
 * To check whether your installation works, import pyms3d in ipython or jupyter-lab. If import is successful, your installation works.
 
+### By default, pyms3d prefer OpenCL device whose device type is "GPU". If you want to use CPU, you can change the device type to "CPU" in the following way:
+
+* go to [mscomplex-3d/core/OpenCL/grid_dataset_cl.cpp](https://bitbucket.org/vgl_iisc/mscomplex-3d/src/master/core/OpenCL/grid_dataset_cl.cpp), line no. 272
+* change the condition of the "if statement" :
+    
+    from:
+
+    ```cpp
+    devices[j].getInfo<CL_DEVICE_TYPE>() == CL_DEVICE_TYPE_GPU
+    ```
+    to:
+    ```cpp
+    devices[j].getInfo<CL_DEVICE_TYPE>() == CL_DEVICE_TYPE_CPU
+    ```
+    
+* build the pyms3d again.
+
 ## Running the Pipeline
 
 The python scripts to run the pipeline can be found in the Python Routines folder. You should have all the python packages specified above to run the pipeline successfully. The scripts and their input formats are described below:
 
 ### distance_field.py
 
-This script takes as input the raw CT image (multiple formats are to be supported, currently '.mat') and outputs the distance field based on the extracted boundary. To run the script, execute the following command in the terminal:
+This script takes as input the raw CT image (multiple formats are to be supported, currently '.mat' ,'.raw' formats are supported) and outputs the distance field based on the extracted boundary. To run the script, execute the following command in the terminal:
 
-`python distace_field.py [Path to raw data file] [downscaling factor]`
+`python distace_field.py [Path to mat/raw data file] [downscaling factor]`
 
 This will store the computed distance field in MetaImage format (.mhd + .raw) in the 'ChamferDistance' folder in the repository. Also a raw data file (.mhd + .raw) is stored in the raw data folder.
 
