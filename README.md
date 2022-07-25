@@ -16,10 +16,6 @@ https://doi.org/10.1007/s10035-021-01182-7
 
 An earlier version of this repository which was used to obtain the results in the paper can also be found [here](https://github.com/karran13/Granular-Material-Packing-Analysis).
 
-e-mail: karran13@gmail.com
-
-e-mail: saurabhsingh@alum.iisc.ac.in
-
 ---
 # Requirements
 
@@ -179,9 +175,9 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  
-Authors   : Karran Pandey, Saurabh Singh
+Authors   : Karran Pandey, Saurabh Singh, Dinesh Rathod
 
-Contact  : karran13@gmail.com , saurabhsingh@alum.iisc.ac.in
+Contact  : karran13@gmail.com , saurabhsingh@alum.iisc.ac.in, rathoddinesh@iisc.ac.in
 
 
 ---
