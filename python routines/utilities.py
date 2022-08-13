@@ -697,7 +697,14 @@ def get_segmentation_index_dual(msc, img, rtype="VTP"):
             des_geom = msc.des_geom(m)
             for cube_id in des_geom:
                 dual_pt = dp[cube_id]
-                if(img[int(dual_pt[0]), int(dual_pt[1]), int(dual_pt[2])] < 0):
+                if (max(img[int(dual_pt[0] - 0.5), int(dual_pt[1] - 0.5), int(dual_pt[2] - 0.5)],
+                        img[int(dual_pt[0] + 0.5), int(dual_pt[1] - 0.5), int(dual_pt[2] - 0.5)],
+                        img[int(dual_pt[0] - 0.5), int(dual_pt[1] + 0.5), int(dual_pt[2] - 0.5)],
+                        img[int(dual_pt[0] + 0.5), int(dual_pt[1] + 0.5), int(dual_pt[2] - 0.5)],
+                        img[int(dual_pt[0] - 0.5), int(dual_pt[1] - 0.5), int(dual_pt[2] + 0.5)],
+                        img[int(dual_pt[0] + 0.5), int(dual_pt[1] - 0.5), int(dual_pt[2] + 0.5)],
+                        img[int(dual_pt[0] - 0.5), int(dual_pt[1] + 0.5), int(dual_pt[2] + 0.5)],
+                        img[int(dual_pt[0] + 0.5), int(dual_pt[1] + 0.5), int(dual_pt[2] + 0.5)]) < 0):
                     continue
                 val.InsertNextValue(
                     img[int(dual_pt[0]), int(dual_pt[1]), int(dual_pt[2])])
