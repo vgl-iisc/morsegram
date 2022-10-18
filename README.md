@@ -30,6 +30,12 @@ with the following packages:
 5. numpy/scipy
 6. numba
 
+
+## Tested on / System requirements
+
+    Ubuntu 20.04 LTS
+    Python 3.8
+
 ---
 
 # Instructions
