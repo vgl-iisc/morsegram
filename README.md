@@ -19,17 +19,13 @@ An earlier version of this repository which was used to obtain the results in th
 ---
 # Requirements
 
-To compile and execute this code, you will need Cmake > 3.1.8, Boost > 1.58,
-OpenCL 1.1 (implicitly available along with CUDA > 10.1), OpenMP and python
-with the following packages:
+To compile and execute this code, you will need following libraries:
 
-1. vtk
-2. scikit-image
-3. SimpleITK
-4. ITK
-5. numpy/scipy
-6. numba
-
+1. Cmake
+2. Boost
+3. OpenCL 1.1
+4. OpenMP
+5. CUDA > 10.1
 
 ## Tested on / System requirements
 
@@ -124,6 +120,12 @@ The test dataset, located in the 'Test Data' folder in the repository, is an mhd
 ![](imgs/raw%20data%20vol%20render.png)
 
 ## Running the Pipeline
+
+<!-- install the requirements -->
+
+Install the requirements using the following command:
+
+    pip install -r requirements.txt
 
 The python scripts to run the pipeline can be found in the Python Routines folder. You should have all the python packages specified above to run the pipeline successfully. The scripts and their input formats are described below:
 
