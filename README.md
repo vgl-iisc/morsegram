@@ -117,7 +117,7 @@ git clone repository_address
 
 The test dataset, located in the 'Test Data' folder in the repository, is an mhd file of the CT scan of a spherical bead packing. When visualized, the scan looks as follows:
 
-![](imgs/raw%20data%20vol%20render.png)
+![](READMEFiles/raw%20data%20vol%20render.png)
 
 ## Running the Pipeline
 
@@ -137,11 +137,11 @@ This script takes as input the raw CT image (multiple formats are to be supporte
 
 eg :
 
-![](imgs/Screenshot%20from%202022-10-16%2023-37-43.png)
+![](READMEFiles/Screenshot%20from%202022-10-16%2023-37-43.png)
 
 This will store the computed distance field in MetaImage format (.mhd + .raw) in the 'ChamferDistance' folder in the repository. Also a raw data file (.mhd + .raw) is stored in the raw data folder. When visualized in ParaView, the isosurafce with isovalue 0 looks as follows:
 
-![](imgs/bd_surface.png)
+![](READMEFiles/bd_surface.png)
 
 ### main.py
 
@@ -153,17 +153,17 @@ takes the computed distance field (in .raw format) as input and returns the stru
 
 eg:
 
-![](imgs/Screenshot%20from%202022-10-16%2023-30-41.png)
+![](READMEFiles/Screenshot%20from%202022-10-16%2023-30-41.png)
 
 The program will display the following menu:
 
-![](imgs/Screenshot%20from%202022-10-16%2023-34-47.png)
+![](READMEFiles/Screenshot%20from%202022-10-16%2023-34-47.png)
 
 Running this will store the selected structures in '.mhd' or '.vtp' format (accessible through VTK/ParaView) in the 'Outputs' folder in the repository.
 
 Few notes here: Use the 'knee' in the persistence curve to select a simplification threshold.
 
-![](imgs/pers_curve.png)
+![](READMEFiles/pers_curve.png)
 
 We identify the precise persistence value for the knee, by hovering the cursor over the graph at the location of the knee and seeing the displayed x-co-ordinate in the persistence curve window. In this case, it turns out to be 0.2.
 
@@ -173,11 +173,11 @@ These files, along with information about the grain centres, contact regions and
 
 Segmentation:
 
-![](imgs/segmentation.png)
+![](READMEFiles/segmentation.png)
 
 Connectivity Network:
 
-![](imgs/contact_network.png)
+![](READMEFiles/contact_network.png)
 
 ---
 
