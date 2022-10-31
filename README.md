@@ -19,16 +19,18 @@ An earlier version of this repository which was used to obtain the results in th
 ---
 # Requirements
 
-To compile and execute this code, you will need Cmake > 3.1.8, Boost > 1.58,
-OpenCL 1.1 (implicitly available along with CUDA > 10.1), OpenMP and python
-with the following packages:
+To compile and execute this code, you will need following libraries:
 
-1. vtk
-2. scikit-image
-3. SimpleITK
-4. ITK
-5. numpy/scipy
-6. numba
+1. Cmake
+2. Boost
+3. OpenCL 1.1
+4. OpenMP
+5. CUDA > 10.1
+
+## Tested on / System requirements
+
+    Ubuntu 20.04 LTS
+    Python 3.8
 
 ---
 
@@ -111,7 +113,19 @@ git clone repository_address
     
 * build the pyms3d again.
 
+## Dataset
+
+The test dataset, located in the 'Test Data' folder in the repository, is an mhd file of the CT scan of a spherical bead packing. When visualized, the scan looks as follows:
+
+![](READMEFiles/raw%20data%20vol%20render.png)
+
 ## Running the Pipeline
+
+<!-- install the requirements -->
+
+Install the requirements using the following command:
+
+    pip install -r requirements.txt
 
 The python scripts to run the pipeline can be found in the Python Routines folder. You should have all the python packages specified above to run the pipeline successfully. The scripts and their input formats are described below:
 
@@ -121,7 +135,13 @@ This script takes as input the raw CT image (multiple formats are to be supporte
 
 `python distace_field.py [Path to mat/raw data file] [downscaling factor]`
 
-This will store the computed distance field in MetaImage format (.mhd + .raw) in the 'ChamferDistance' folder in the repository. Also a raw data file (.mhd + .raw) is stored in the raw data folder.
+eg :
+
+![](READMEFiles/Screenshot%20from%202022-10-16%2023-37-43.png)
+
+This will store the computed distance field in MetaImage format (.mhd + .raw) in the 'ChamferDistance' folder in the repository. Also a raw data file (.mhd + .raw) is stored in the raw data folder. When visualized in ParaView, the isosurafce with isovalue 0 looks as follows:
+
+![](READMEFiles/bd_surface.png)
 
 ### main.py
 
@@ -131,9 +151,33 @@ takes the computed distance field (in .raw format) as input and returns the stru
 
 `python main.py [Path to .raw file of distance field]`
 
+eg:
+
+![](READMEFiles/Screenshot%20from%202022-10-16%2023-30-41.png)
+
+The program will display the following menu:
+
+![](READMEFiles/Screenshot%20from%202022-10-16%2023-34-47.png)
+
 Running this will store the selected structures in '.mhd' or '.vtp' format (accessible through VTK/ParaView) in the 'Outputs' folder in the repository.
 
 Few notes here: Use the 'knee' in the persistence curve to select a simplification threshold.
+
+![](READMEFiles/pers_curve.png)
+
+We identify the precise persistence value for the knee, by hovering the cursor over the graph at the location of the knee and seeing the displayed x-co-ordinate in the persistence curve window. In this case, it turns out to be 0.2.
+
+We then use the other options to store the outputs for the segmentation and connectivity network.
+
+These files, along with information about the grain centres, contact regions and points will be stored in the outputs folder. When visualized, the segmentation, network, contacts and grain centres will look as follows:
+
+Segmentation:
+
+![](READMEFiles/segmentation.png)
+
+Connectivity Network:
+
+![](READMEFiles/contact_network.png)
 
 ---
 
