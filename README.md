@@ -46,12 +46,18 @@ To compile and execute this code, you will need following libraries:
 
 ## Installing pyms3d
 
-The MS-Complex computation is done using pyms3d. You can either run bash script [here](./build_mscomplex3d.sh) to install pyms3d or the installation instruction of pyms3d are as follows:
+The MS-Complex computation is done using pyms3d. You can either run bash script [here](./build_pyms3d.sh) to install pyms3d 
+
+```sh
+./build_pyms3d.sh
+```
+
+or follow the steps below to install pyms3d manually:
 
 * Clone the repository
 
 ```sh
-git clone repository_address
+git clone https://bitbucket.org/vgl_iisc/mscomplex-3d.git
 ```
 
 * Navigate to mscomplex-3d, create build and install directories
@@ -183,7 +189,7 @@ Connectivity Network:
 
 # References
 
-For more information about the method, refer to the follwoing paper. Please cite these publications if you use this method or the library in your work.
+For more information about the method, refer to the following paper. Please cite these publications if you use this method or the library in your work.
 
 
 Karran Pandey, Talha Bin Masood, Saurabh Singh, Ingrid Hotz, Vijay Natarajan, and Tejas G. Murthy.
