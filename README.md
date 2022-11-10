@@ -44,15 +44,17 @@ To compile and execute this code, you will need following libraries:
 * Install python packages, specifically numpy as it will be used for building the pyms3d module.
 * Install cmake-gui for building pyms3d.
 
-## Installing pyms3d
+## Building / Installing pyms3d
 
-The MS-Complex computation is done using pyms3d. You can either run bash script [here](./build_pyms3d.sh) to install pyms3d 
+The MS-Complex computation is done using pyms3d. You can either run bash script [here](./build_pyms3d.sh) to build pyms3d.
 
 ```sh
 ./build_pyms3d.sh
 ```
 
-or follow the steps below to install pyms3d manually:
+
+---
+Or follow the steps below to build pyms3d manually:
 
 * Clone the repository
 
@@ -60,10 +62,11 @@ or follow the steps below to install pyms3d manually:
 git clone https://bitbucket.org/vgl_iisc/mscomplex-3d.git
 ```
 
-* Navigate to mscomplex-3d, create build and install directories
+* Navigate to mscomplex-3d, and download submodule and create <i>build</i> and <i>install</i> directories
 
  ```sh
- cd bead-network-computation/ms\ complex\ software/mscomplex-3d/
+ cd mscomplex-3d/
+ git submodule update --init --recursive
  mkdir build install
  cd build
  ```
@@ -99,7 +102,7 @@ git clone https://bitbucket.org/vgl_iisc/mscomplex-3d.git
 
    Where 8 is number of processes used to build the pyms3d.
 
-* If everything went alright, you should see 'pyms3d.so' in 'Python Routines' directory.
+* If everything went alright, you should see <b><i>'pyms3d.so'</i></b> in 'Python Routines' directory.
 * To check whether your installation works, import pyms3d in ipython or jupyter-lab. If import is successful, your installation works.
 
 ### By default, pyms3d prefer OpenCL device whose device type is "GPU". If you want to use CPU, you can change the device type to "CPU" in the following way:
