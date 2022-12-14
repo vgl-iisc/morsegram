@@ -15,7 +15,10 @@ from skimage.measure import block_reduce
 from skimage.segmentation import morphological_chan_vese
 import vtk
 import vtk.util.numpy_support as nps
-
+import time
+import multiproc
+from multiprocessing import Process, cpu_count
+from tqdm import tqdm
 
 def addConnectivityData(dataset):
     """Extract cells that share common points
@@ -686,39 +689,70 @@ def get_segmentation_index_dual(msc, img, rtype="VTP"):
     dp = msc.dual_points()
     cps_max = msc.cps(3)
     if rtype == "VTP":
+        
+        ensem_dir = "../Outputs/grains/"
+
+        if not os.path.exists(ensem_dir):
+            os.mkdir(ensem_dir)
+
+        start_time = time.time()
+
+        num_proc = cpu_count()
+        print("Number of processors: ", num_proc)
+
+        proc_works = [[] for i in range(num_proc)]
+        for i, m in enumerate(cps_max):
+            proc_works[i % num_proc].append(m)
+        
+        list_procs = []
+
+        for i in range(num_proc):
+            l_p = Process(target=multiproc.proc_work, args=(proc_works[i], msc, dp, img, ensem_dir))
+            list_procs.append(l_p)
+            l_p.start()
+            print("Started process ", i)
+        
+        for l_p in list_procs:
+            l_p.join()
+            print("Joined process ", l_p.pid)
+
+        poly_data = vtk.vtkPolyData()
+
         pa, cp_ids = vtk.vtkPoints(), vtk.vtkIntArray()
         ca, val = vtk.vtkCellArray(), vtk.vtkDoubleArray()
         cp_ids.SetName("CP ID")
         val.SetName('Distance Val')
         count = 0
-        for m in cps_max:
-            if(msc.cp_func(m) <= 0):
-                continue
-            des_geom = msc.des_geom(m)
-            for cube_id in des_geom:
-                dual_pt = dp[cube_id]
-                if (max(img[int(dual_pt[0] - 0.5), int(dual_pt[1] - 0.5), int(dual_pt[2] - 0.5)],
-                        img[int(dual_pt[0] + 0.5), int(dual_pt[1] - 0.5), int(dual_pt[2] - 0.5)],
-                        img[int(dual_pt[0] - 0.5), int(dual_pt[1] + 0.5), int(dual_pt[2] - 0.5)],
-                        img[int(dual_pt[0] + 0.5), int(dual_pt[1] + 0.5), int(dual_pt[2] - 0.5)],
-                        img[int(dual_pt[0] - 0.5), int(dual_pt[1] - 0.5), int(dual_pt[2] + 0.5)],
-                        img[int(dual_pt[0] + 0.5), int(dual_pt[1] - 0.5), int(dual_pt[2] + 0.5)],
-                        img[int(dual_pt[0] - 0.5), int(dual_pt[1] + 0.5), int(dual_pt[2] + 0.5)],
-                        img[int(dual_pt[0] + 0.5), int(dual_pt[1] + 0.5), int(dual_pt[2] + 0.5)]) < 0):
-                    continue
-                val.InsertNextValue(
-                    img[int(dual_pt[0]), int(dual_pt[1]), int(dual_pt[2])])
-                pa.InsertNextPoint(dual_pt)
+
+        print("Merging files from: ", ensem_dir)
+
+        for grain_pd_file in tqdm(os.listdir(ensem_dir)):
+
+            # grain_cp_id.vtp
+
+            reader = vtk.vtkXMLPolyDataReader()
+            reader.SetFileName(ensem_dir + grain_pd_file)
+            # print("Reading file: ", ensem_dir + grain_pd_file)
+            reader.Update()
+            grain_pd = reader.GetOutput()
+
+            for i in range(grain_pd.GetNumberOfPoints()):
+                pa.InsertNextPoint(grain_pd.GetPoint(i))
+                cp_ids.InsertNextValue(grain_pd.GetPointData().GetArray("CP ID").GetValue(i))
+                val.InsertNextValue(grain_pd.GetPointData().GetArray("Distance Val").GetValue(i))
                 ca.InsertNextCell(1)
                 ca.InsertCellPoint(count)
-                cp_ids.InsertNextValue(m)
                 count += 1
-        pd = vtk.vtkPolyData()
-        pd.SetPoints(pa)
-        pd.SetVerts(ca)
-        pd.GetPointData().AddArray(cp_ids)
-        pd.GetPointData().AddArray(val)
-        return pd
+            
+        poly_data.SetPoints(pa)
+        poly_data.SetVerts(ca)
+        poly_data.GetPointData().AddArray(cp_ids)
+        poly_data.GetPointData().AddArray(val)
+
+        print("Time taken for segmentation: ", time.time() - start_time, " seconds")
+        return poly_data
+
+
     elif rtype == "NP":
         count = 0
         seg_img = np.full(img.shape, 0, dtype=np.uint32, order='C')
