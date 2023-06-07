@@ -1,17 +1,21 @@
 import pyms3d
 import numpy as np
 import matplotlib.pyplot as plt
+import kneed
+from datetime import datetime
+from scipy.interpolate import UnivariateSpline
 
 
-def compute_pers_diagm(data_file_name, dim):
+def compute_pers_diagm(data_file_name, dim, mode):
     """Comput the persistence diagram
 
     Args:
         data_file_name (str): raw file with distance field
-        dim (tuple): dimensions of distance field
+        dim (tuple): dimensions of distance field 
+        mode (str): mode of computation (manual or automatic)
 
     Returns:
-        None: None
+        float: knee point
     """
     # Comput msc
     msc = pyms3d.mscomplex()
@@ -38,34 +42,97 @@ def compute_pers_diagm(data_file_name, dim):
     # p_diagm_list = np.concatenate((b_value, d_value, pers, sad,
     #                               cps_max[:, np.newaxis]), axis=1)
 
-    print('Saddle values (quantiles - 0.25 spacing) ',
-          np.quantile(b_value, [0, 0.25, 0.50, 0.75, 1.0]))
-    print('Max values (quantiles - 0.25 spacing) ',
-          np.quantile(d_value, [0, 0.25, 0.50, 0.75, 1.0]))
+    if mode == "manual":
 
+        print('Saddle values (quantiles - 0.25 spacing) ',
+              np.quantile(b_value, [0, 0.25, 0.50, 0.75, 1.0]))
+        print('Max values (quantiles - 0.25 spacing) ',
+              np.quantile(d_value, [0, 0.25, 0.50, 0.75, 1.0]))
+
+        plt.figure()
+        plt.hist(b_value, stacked=True, label="saddle value", rwidth=0.1,
+                 cumulative=True, density=True, histtype='bar')
+        plt.hist(d_value, stacked=True, label="Max value", rwidth=0.1,
+                 cumulative=True, density=True, histtype='bar')
+        plt.xlabel('func value')
+        plt.legend()
+        plt.show()
+
+        print("Take a note of the persistence value at the knee!")
+        plt.figure()
+        plt.plot(np.sort(pers, axis=0)[::-1], np.arange(pers.shape[0]))
+        plt.xlabel("Persistence")
+        plt.ylabel("Survived critical points")
+        plt.title("Persistence curve")
+        plt.show()
+
+        plt.figure()
+        plt.plot(b_value, d_value, 'r.')
+        plt.plot([0, max(max(b_value), max(d_value))],
+                [0, max(max(b_value), max(d_value))])
+        plt.xlabel("Birth")
+        plt.ylabel("Death")
+        plt.title("Persistence diagram")
+        plt.show()
+
+        # save the persistence diagram plot
+        plt.figure()
+        plt.plot(np.sort(pers, axis=0)[::-1], np.arange(pers.shape[0]))
+        plt.xlabel("Persistence")
+        plt.ylabel("Survived critical points")
+        plt.title("Persistence curve")
+        plt.savefig("../Outputs/pd_" + str(datetime.now()) + ".svg")
+
+        return None
+
+    else:
+        # auto mode
+        return get_knee_point(pers.flatten())
+
+
+def smooth_spline(X, Y, s=None):
+    """
+    Smooth the curve using spline
+
+    Args:
+        X (list): x values
+        Y (list): y values
+        s (float, optional): smoothing factor. Defaults to None.
+
+    Returns:
+        list: smoothed y values
+    """
+    spl = UnivariateSpline(X, Y, s=s)
+    return spl(X)
+
+
+def get_knee_point(pers : list):
+    """
+    Get the knee point from the persistence curve
+    
+    Args:
+        pers (list): persistence values
+
+    Returns:
+        float: knee point
+    """
     plt.figure()
-    plt.hist(b_value, stacked=True, label="saddle value", rwidth=0.1,
-             cumulative=True, density=True, histtype='bar')
-    plt.hist(d_value, stacked=True, label="Max value", rwidth=0.1,
-             cumulative=True, density=True, histtype='bar')
-    plt.xlabel('func value')
+    X = np.sort(pers).astype(np.float64)
+    Y = np.arange(len(pers))[::-1]
+
+    # smooth the curve
+    # smooth_Y = smooth_spline(X, Y)
+
+    kneedle = kneed.KneeLocator(X, Y, S=4.0, curve='convex', direction='decreasing')
+    plt.plot(X, Y)
+    # plt.plot(X, smooth_Y, label='smoothed')
+    # mark the knee point using dotted line and red color
+    plt.axvline(kneedle.knee, linestyle='--', color='r', label='knee ' + str(kneedle.knee))
     plt.legend()
-    plt.show()
+    plt.xlabel('Persistence')
+    plt.ylabel('Survived Critical Points')
+    plt.title('Persistence Curve')
+    # plt.show()
+    plt.savefig("../Outputs/pc_" + str(datetime.now()) + ".svg")
 
-    print("Take a note of the persistence value at the knee!")
-    plt.figure()
-    plt.plot(np.sort(pers, axis=0)[::-1], np.arange(pers.shape[0]))
-    plt.xlabel("Persistence")
-    plt.ylabel("Survived critical points")
-    plt.title("Persistence curve")
-    plt.show()
-
-    plt.figure()
-    plt.plot(b_value, d_value, 'r.')
-    plt.plot([0, max(max(b_value), max(d_value))],
-             [0, max(max(b_value), max(d_value))])
-    plt.xlabel("Birth")
-    plt.ylabel("Death")
-    plt.title("Persistence diagram")
-    plt.show()
-    return None
+    return kneedle.knee

@@ -2,3 +2,8 @@
 *.so
 Outputs*
 ChamferDistance
+*.svg
+*.mat
+*.txt
+Test\ Data/*
+*.json

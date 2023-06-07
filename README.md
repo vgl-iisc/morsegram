@@ -188,6 +188,19 @@ Connectivity Network:
 
 ![](READMEFiles/contact_network.png)
 
+
+<!-- auto mode -->
+## Auto Mode
+
+The program also allows for the automatic computation of the segmentation, connectivity network and contact regions. To run the program in auto mode, execute the following command:
+
+`python main.py --mode auto [Path to .raw file of distance field]`
+
+eg:
+
+### Automatic knee detection
+<img src="./READMEFiles/pc.svg">
+
 ---
 
 # References

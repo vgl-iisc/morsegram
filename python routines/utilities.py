@@ -19,6 +19,8 @@ import time
 import multiproc
 from multiprocessing import Process, cpu_count
 from tqdm import tqdm
+import shutil
+
 
 def addConnectivityData(dataset):
     """Extract cells that share common points
@@ -328,7 +330,7 @@ def collect_neighbours(points):
     return np.unique(pts.astype(int), axis=0)
 
 
-def compute_contact_regions(msc, image):
+def compute_contact_regions(msc, image, isDesManifold=True):
     """Get the contact regions
 
     Args:
@@ -361,50 +363,74 @@ def compute_contact_regions(msc, image):
     # initialize vtk data type
     cp_ids = vtk.vtkIntArray()
     cp_ids.SetName('CP ID')
-    val = vtk.vtkDoubleArray()
+    val = vtk.vtkFloatArray()
     val.SetName('Val')
     des_man_pts = vtk.vtkPoints()
     des_man_pts.SetData(nps.numpy_to_vtk(primal_pts, "Pts"))
     des_man_quads = vtk.vtkCellArray()
 
+    start_time = time.time()
+
+    num_proc = cpu_count()
+    print("Number of processors: ", num_proc)
+
+    proc_works = [[] for i in range(num_proc)]
+    for i, m in enumerate(cps_2sad):
+        proc_works[i % num_proc].append(m)
+    
+    list_procs = []
+
+    # create a folder for saddle
+    saddle2_folder = '../Outputs/Saddle2'
+
+    if os.path.exists(saddle2_folder):
+        shutil.rmtree(saddle2_folder)
+
+    os.makedirs(saddle2_folder)
+    
+
+    for i in range(num_proc):
+        l_p = Process(target=multiproc.contact_region_task, args=(i, saddle2_folder, 
+                            proc_works[i], msc, primal_pts, image, isDesManifold))
+        list_procs.append(l_p)
+        l_p.start()
+        print("Started process ", i)
+    
+    for l_p in list_procs:
+        l_p.join()
+        print("Joined process ", l_p.pid)
+
+    # terminate all the processes
+    for l_p in list_procs:
+        l_p.terminate()
+        print("Terminated process ", l_p.pid)
+
     surv_sads = []
-    for s in cps_2sad:
-        # ignore the saddles in background
-        # or saddle which is connected to just one maxima
-        if (msc.cp_func(s) < 0) or (len(msc.asc(s)) != 2):
-            # print("Saddle belongs to background")
-            continue
 
-        # if (msc.cp_func(msc.asc(s)[0, 0]) < 0) or (msc.cp_func(msc.asc(s)[1, 0]) < 0):
-        #     print("This maxima point lies in the background.")
-
-        # Descending manifold geometry of 2-saddle point
-        des_man = msc.des_geom(s)
-        surv_sads.append(int(s))  # added inplace of exract surv saddle
-        for elem in des_man:
-            # check if elem in descending manifold belongs to background
-            ind = np.ravel_multi_index(
-                primal_pts[elem].astype(int).transpose(), image.shape)
-            dist_vals = image.ravel()[ind]
-            if (np.min(dist_vals) <= 0):
-                continue
-
-            # for a  correct elem stores the cp_id and des_man_quad
-            cp_ids.InsertNextValue(int(s))
+    # iterate over all the files and collect the results:
+    for i in range(num_proc):
+        p_surv_sads = np.load(saddle2_folder + "/surv_sads_%d.npy" % i)
+        p_des_man_quads = np.load(saddle2_folder + "/des_man_quads_%d.npy" % i)
+        p_cp_ids = np.load(saddle2_folder + "/cp_ids_%d.npy" % i)
+        surv_sads.extend(p_surv_sads)
+        for cid, quad in zip(p_cp_ids, p_des_man_quads):
+            cp_ids.InsertNextValue(int(cid))
             des_man_quads.InsertNextCell(4)
-            des_man_quads.InsertCellPoint(elem[0])
-            des_man_quads.InsertCellPoint(elem[1])
-            des_man_quads.InsertCellPoint(elem[3])
-            des_man_quads.InsertCellPoint(elem[2])
-
+            des_man_quads.InsertCellPoint(quad[0])
+            des_man_quads.InsertCellPoint(quad[1])
+            des_man_quads.InsertCellPoint(quad[3])
+            des_man_quads.InsertCellPoint(quad[2])
+    
     # stores the descending manifolds
-    des_man = vtk.vtkPolyData()
-    des_man.SetPoints(des_man_pts)
-    des_man.SetPolys(des_man_quads)
-    des_man.GetCellData().AddArray(cp_ids)
-    # des_man.GetPointData().AddArray(val)
-    des_man = addConnectivityData(des_man)
-    # des_man, surv_sads = extract_surviving_sads(des_man, msc)
+    des_man = None
+    if isDesManifold:
+        des_man = vtk.vtkPolyData()
+        des_man.SetPoints(des_man_pts)
+        des_man.SetPolys(des_man_quads)
+        des_man.GetCellData().AddArray(cp_ids)
+        # des_man.GetPointData().AddArray(val)
+        des_man = addConnectivityData(des_man)
+        # des_man, surv_sads = extract_surviving_sads(des_man, msc)
     return des_man, surv_sads
 
 
@@ -554,20 +580,25 @@ def get_extremum_graph(msc, surviving_sads):
     return pd
 
 
-def get_max(msc):
-    """Get the information about the maximas
+def get_cp(msc, cp_type):
+    """Get the information about the critical points
 
     Args:
         msc (msc objec): Morse Complex object
-    
+        cp_type (int): critical point type
+                        0 - minima
+                        1 - 1-saddle
+                        2 - 2-saddle
+                        3 - maxima
+
     Description:
 
     Returns:
-        vtk polydata: coordinates, index type, function value, max index
+        vtk polydata: coordinates, index type, function value, index
     """
-    cps_max = msc.cps(3)
+    req_cps = msc.cps(cp_type)
     cpList = []
-    for m in cps_max:
+    for m in req_cps:
         if(msc.cp_func(m) > 0):
             cpList.append((msc.cp_cellid(m), 3, msc.cp_func(m), m))
     cpList = list(set(cpList))
@@ -611,12 +642,13 @@ def get_saddles(msc, surv_sads):
         vtk polydata: coords, index type, function at the saddle points, saddle index, max1, max2
     """
     cpList = []
-    for s in surv_sads:
+    for s in tqdm(surv_sads):
         s, index = int(s), 2  # saddle index - 2
         # maxList is the max critical points connected with s
         co_ords, val, maxList = msc.cp_cellid(
             s), msc.cp_func(s), msc.asc(s)[:, 0]
-        cpList.append((co_ords, index, val, s, maxList[0], maxList[1]))
+        cpList.append((co_ords, index, val, s, maxList[0], maxList[1], 
+                       msc.cp_func(maxList[0]), msc.cp_func(maxList[1])))
 
     # cpList = list(set(cpList))
 
@@ -625,20 +657,25 @@ def get_saddles(msc, surv_sads):
     pa, ia = vtk.vtkPoints(), vtk.vtkIntArray()
     fa, cp_ids = vtk.vtkFloatArray(), vtk.vtkIntArray()
     max_1, max_2 = vtk.vtkIntArray(), vtk.vtkIntArray()
+    max_1_values, max_2_values = vtk.vtkFloatArray(), vtk.vtkFloatArray()
     ia.SetName("Index")
     fa.SetName("Val")
     cp_ids.SetName("CP ID")
     max_1.SetName("Max 1")
     max_2.SetName("Max 2")
+    max_1_values.SetName("Max 1 Val")
+    max_2_values.SetName("Max 2 Val")
     maxs = []
 
     ca = vtk.vtkCellArray()
-    for i, (p, idx, val, cpidx, m1idx, m2idx) in enumerate(cpList):
+    for i, (p, idx, val, cpidx, m1idx, m2idx, m1val, m2val) in tqdm(enumerate(cpList)):
         pa.InsertNextPoint(np.array(p, np.float32)/2)
         ia.InsertNextValue(idx)
         fa.InsertNextValue(val)
         max_1.InsertNextValue(m1idx)
         max_2.InsertNextValue(m2idx)
+        max_1_values.InsertNextValue(m1val)
+        max_2_values.InsertNextValue(m2val)
         cp_ids.InsertNextValue(cpidx)
         ca.InsertNextCell(1)
         ca.InsertCellPoint(i)
@@ -654,6 +691,8 @@ def get_saddles(msc, surv_sads):
     pd.GetPointData().AddArray(cp_ids)
     pd.GetPointData().AddArray(max_1)
     pd.GetPointData().AddArray(max_2)
+    pd.GetPointData().AddArray(max_1_values)
+    pd.GetPointData().AddArray(max_2_values)
     return pd, maxs
 
 
@@ -692,8 +731,9 @@ def get_segmentation_index_dual(msc, img, rtype="VTP"):
         
         ensem_dir = "../Outputs/grains/"
 
-        if not os.path.exists(ensem_dir):
-            os.mkdir(ensem_dir)
+        for dir in [ensem_dir]:
+            if not os.path.exists(dir):
+                os.mkdir(dir)
 
         start_time = time.time()
 
@@ -719,7 +759,7 @@ def get_segmentation_index_dual(msc, img, rtype="VTP"):
         poly_data = vtk.vtkPolyData()
 
         pa, cp_ids = vtk.vtkPoints(), vtk.vtkIntArray()
-        ca, val = vtk.vtkCellArray(), vtk.vtkDoubleArray()
+        ca, val = vtk.vtkCellArray(), vtk.vtkFloatArray()
         cp_ids.SetName("CP ID")
         val.SetName('Distance Val')
         count = 0
