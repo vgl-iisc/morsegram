@@ -7,3 +7,33 @@ ChamferDistance
 *.txt
 Test\ Data/*
 *.json
+Grains
+.DS_STORE
+Images
+Sand_Grains
+Steel_Beads*
+*.raw
+*.mhd
+*.pyc
+.ipynb_checkpoints
+Output*
+__pycache__
+temp.txt
+.idea
+.vscode
+*.obj
+*.pdb
+*.vtp
+*.vtu
+*.stl
+*.ply
+*.pcd
+.morsegram
+*.xml
+# exclude xml files of color maps colormap/
+!colormap/*.xml
+my-cache
+*.svg
+*.pt
+*.off
+my-proj*

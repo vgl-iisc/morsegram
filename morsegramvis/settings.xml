@@ -1,0 +1,1 @@
+<root><lighting>{'ambient': 50, 'diffuse': 50, 'specular': 100, 'specular power': 100}</lighting><ao>{'ambient occlusion factor': '0', 'kernel size': '128'}</ao></root>
