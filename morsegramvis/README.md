@@ -1,9 +1,11 @@
 # MorseGramVis - A Visualization and Analysis Tool for a segmented Granular Media
 
 ## Description
+
     Visualization and Analysis tool for MorseGram.
 
 ## UI
+
 **Figure 1: Start Window**
 
 ![Start Window](assets/ui_start.png)
@@ -42,6 +44,7 @@
 2. Run the project: `python start.py`
 
 ## Getting Started with Visualization
+
 **Task: Surface Reconstruction**
 
 Follow the steps below to perform visualization:
@@ -57,7 +60,6 @@ Follow the steps below to perform visualization:
 9. Finally, open the ensemble visualization window to view and analyze the ensemble or open the single/multi-particle visualization window to view and analyze at the particle level.
 
 These steps will guide you through the process of performing ensemble visualization using the tool.
-
 
 ## Getting rid of erroneous particles
 
@@ -75,8 +77,8 @@ To perform cleaning and remove erroneous particles, please follow these steps:
 
 By following these steps, you will successfully perform cleaning and remove erroneous particles from the dataset, ensuring a more accurate and reliable analysis.
 
-
 ## Getting Started with Query Engine
+
 **Steps to Follow:**
 
 1. Ensure that you have performed the surface reconstruction task for all particles in the dataset.
@@ -102,7 +104,6 @@ Please follow these steps:
 7. In the Insights/Analysis window, you will find various plots and information related to the dataset based on the option chosen from the navigation options.
 
 By exploring the different navigation options in the Insights/Analysis window, you can access valuable insights and analysis of the granular material dataset.
-
 
 ## Visualization of Contact Region
 
@@ -135,6 +136,7 @@ The following instructions outline a three-step process for adjusting the enviro
 By following these steps, users can easily access and modify the environment parameters, including background color and lighting conditions, through the setting dialog.
 
 ## Computing Simplified Saddle Graph
+
 Here is a set of instructions to compute a simplified saddle graph:
 
 1. Ensure that the surface reconstruction task for all particles is complete.
@@ -149,6 +151,7 @@ Here is a set of instructions to compute a simplified saddle graph:
 Following these instructions will allow users to compute and visualize the simplified saddle graph for the surface reconstruction.
 
 ## Manually Labelling Particles
+
 To manually label particles, follow these steps:
 
 1. Ensure that the surface reconstruction task is complete.
@@ -161,6 +164,7 @@ To manually label particles, follow these steps:
 By following these steps, you can create labeled particles, where the labels indicate whether the particles are correctly segmented or not. The pickle file will contain the necessary label information for further analysis.
 
 ## Creating dataset for learning undersegmented particles
+
 To create a dataset for learning undersegmented particles, follow these steps:
 
 1. Ensure that you have completed labeling of particles.
@@ -177,7 +181,7 @@ By following these steps, you will generate a dataset that can be used for train
 
 To train the Graph Neural Network (GNN) using the dataset generated from the previous steps, follow these instructions:
 
-1. Make sure that you have completed the previous task of creating a dataset for learning undersegmented particles. 
+1. Make sure that you have completed the previous task of creating a dataset for learning undersegmented particles.
 2. Run the appropriate classification model implemented in the Jupyter notebook. Locate the notebook file in the "notebooks" folder of the software source code repository.
 3. Ensure that the preprocessed data is stored in the "notebook/data/preprocessed" directory or the appropriate location specified by the notebook.
 4. Start the training process by executing the notebook cells. The model will begin training on the preprocessed dataset.
@@ -197,69 +201,62 @@ If you wish to contribute to this project, you can follow these steps:
 
 ## Features
 
-* Start Window
-
-![Screenshot 2022-11-18 at 2 37 53 AM](https://user-images.githubusercontent.com/85003035/202560528-1643af1e-47dd-4797-aeda-6b1848dcc185.png)
-
-* whole ensemble view
+- Ensemble view
 
 ![Screenshot 2022-08-30 at 7 02 03 PM](https://user-images.githubusercontent.com/85003035/187450419-b718a13b-1c06-46f7-93a4-786ba927751f.png)
 
-* individual grain view
+- individual grain view
 
 ![Screenshot 2022-08-30 at 7 03 36 PM](https://user-images.githubusercontent.com/85003035/187451036-61de49b3-c3e9-4690-a4f8-20b9aee35b88.png)
 
-* individual grain, along with all neighbours view
+- individual grain, along with all neighbours view
 
 ![Screenshot 2022-08-30 at 7 03 50 PM](https://user-images.githubusercontent.com/85003035/187451072-729c71b2-3180-43cb-9518-a3659748883e.png)
 
-* 3D Delaunay triangulation
-
-![Screenshot 2022-09-19 at 10 07 04 PM](https://user-images.githubusercontent.com/85003035/191068439-db02929f-9b06-4940-97a4-033a1b7767aa.png)
-* contact area histogram
+- contact area histogram
 
 ![Screenshot 2022-09-23 at 4 47 23 PM](https://user-images.githubusercontent.com/85003035/191949323-dbf89a80-ffee-4516-a062-298e7ba4da1c.png)
 
-* simple multi-level segmentation
-> * computing bounding box for the selected grain.
-> * create a 3d NumPy array of the same dimension as the bounding box and initialize all values to 0.
-> * for each point of the segmented point cloud, there is a corresponding point in the NumPy array; we initialize its value with the value from the raw input file.
-> * then update the metadata like spacing and origin.
-> * Now, perform next-level segmentation.
+- simple multi-level segmentation
+  > - computing bounding box for the selected grain.
+  > - create a 3d NumPy array of the same dimension as the bounding box and initialize all values to 0.
+  > - for each point of the segmented point cloud, there is a corresponding point in the NumPy array; we initialize its value with the value from the raw input file.
+  > - then update the metadata like spacing and origin.
+  > - Now, perform next-level segmentation.
 
 ![Screenshot 2023-01-24 at 7 48 16 PM](https://user-images.githubusercontent.com/85003035/214319614-b8e491ee-0da4-439b-a86e-2763771a0507.png)
 
 ![Screenshot 2022-12-14 at 7 47 05 PM](https://user-images.githubusercontent.com/85003035/207620555-b4ddae6a-eefe-472b-a012-26ab09e751c9.png)
 
-* Ambient Occlusion
-* PySide6-based UI integration
-> PySide6 is the python binding of the QT library. In this project, all window-related features are implemented using pyside6.
-* Particle statistics computation
-* Contact area statistics computation
-* Extremum graph visualisation
+- Ambient Occlusion
+- PySide6-based UI integration
+  > PySide6 is the python binding of the QT library. In this project, all window-related features are implemented using pyside6.
+- Particle statistics computation
+- Contact area statistics computation
+- Extremum graph visualisation
 
 ![Screenshot 2022-08-30 at 7 04 19 PM](https://user-images.githubusercontent.com/85003035/187451121-89a8a377-04f6-4ba8-a161-adb7a4f7b745.png)
 
-* Search Particle using CP ID
+- Search Particle using CP ID
 
 ![Screenshot 2022-09-23 at 4 52 37 PM](https://user-images.githubusercontent.com/85003035/191950148-4b7dcdec-a6c1-4151-b5c4-74e668a8eb23.png)
 
-* exporting particle statistics to CSV
-* Adjust the lighting condition and background colour
+- exporting particle statistics to CSV
+- Adjust the lighting condition and background colour
 
 ![Screenshot 2022-09-23 at 4 45 01 PM](https://user-images.githubusercontent.com/85003035/191948981-eb1ba8fb-1421-4f70-9417-de276b940994.png)
 
-* Particle information
+- Particle information
 
 ![Screenshot 2022-09-27 at 10 21 10 PM](https://user-images.githubusercontent.com/85003035/192588696-01a19c65-f745-45c4-b242-1883ae982bec.png)
 
-* Toggle visibility of neighbours
+- Toggle visibility of neighbours
 
 ![Screenshot 2022-09-27 at 10 21 56 PM](https://user-images.githubusercontent.com/85003035/192588838-c6aad6a9-18e2-4029-a734-c72f7a82e3d6.png)
 
 ![Screenshot 2022-09-27 at 10 22 01 PM](https://user-images.githubusercontent.com/85003035/192588859-e3f4efc9-1691-46df-9fd7-8a88395c2c00.png)
 
-* Configure Project Settings
+- Configure Project Settings
 
 ![Screenshot 2023-01-11 at 12 14 55 PM](https://user-images.githubusercontent.com/85003035/211736620-c84ca1c4-72f8-4d2c-b940-8c812326a24a.png)
 
@@ -270,14 +267,17 @@ And many more features will be added very soon.
 For any inquiries or support regarding this project, please feel free to reach out to us:
 
 **Rathod Dinesh**
+
 - Email: rathoddinesh@iisc.ac.in
 
 **Vijay Natarajan**
+
 - Email: vijayn@iisc.ac.in
 
 We will be happy to assist you!
 
 <!-- citation -->
+
 ## References:
 
 1. https://www.vtk.org
