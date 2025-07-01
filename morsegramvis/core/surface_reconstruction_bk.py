@@ -6,7 +6,7 @@ from scipy.spatial import Delaunay
 import multiprocessing as mp
 import trimesh
 from numba import jit
-import pymeshlab
+# import pymeshlab
 from enum import Enum
 from core import multiproc
 
@@ -299,63 +299,63 @@ def surface_reconstruct_scipy(input_data, C_pipe):
     return poly_data
 
 
-def smooth_meshlab(filename, dem_dir, opts):
-    '''
-    Smooth the mesh using pymeshlab
-    @param filename: the filename of the mesh
-    @param dem_dir: the directory to save the mesh
-    '''
-    # create a meshset
-    ms = pymeshlab.MeshSet()
+# def smooth_meshlab(filename, dem_dir, opts):
+#     '''
+#     Smooth the mesh using pymeshlab
+#     @param filename: the filename of the mesh
+#     @param dem_dir: the directory to save the mesh
+#     '''
+#     # create a meshset
+#     ms = pymeshlab.MeshSet()
 
-    # load a mesh
-    ms.load_new_mesh(filename)
+#     # load a mesh
+#     ms.load_new_mesh(filename)
 
-    # taubin_smooth
-    ms.apply_coord_taubin_smoothing(stepsmoothnum=opts['iters'],
-                                    lambda_=opts['lambda'],
-                                    mu=opts['mu'])
+#     # taubin_smooth
+#     ms.apply_coord_taubin_smoothing(stepsmoothnum=opts['iters'],
+#                                     lambda_=opts['lambda'],
+#                                     mu=opts['mu'])
 
-    # decimate
-    ms.meshing_decimation_quadric_edge_collapse(targetfacenum=0, targetperc=0.1)
+#     # decimate
+#     ms.meshing_decimation_quadric_edge_collapse(targetfacenum=0, targetperc=0.1)
 
-    # save the mesh
-    ms.save_current_mesh(dem_dir + filename.split('/')[-1].split('.')[0] + ".stl")
+#     # save the mesh
+#     ms.save_current_mesh(dem_dir + filename.split('/')[-1].split('.')[0] + ".stl")
 
 
-def surface_reconstruct_meshlab(filename, dem_dir):
-    '''
-    surface reconstruction using meshlab
-    @param filename: the filename of the mesh
-    @param dem_dir: the directory to save the mesh
-    '''
-    # create a meshset
-    ms = pymeshlab.MeshSet()
+# def surface_reconstruct_meshlab(filename, dem_dir):
+#     '''
+#     surface reconstruction using meshlab
+#     @param filename: the filename of the mesh
+#     @param dem_dir: the directory to save the mesh
+#     '''
+#     # create a meshset
+#     ms = pymeshlab.MeshSet()
 
-    curr_cp = filename.split('/')[-1]
+#     curr_cp = filename.split('/')[-1]
 
-    # load a mesh
-    ms.load_new_mesh(filename)
+#     # load a mesh
+#     ms.load_new_mesh(filename)
 
-    # print(len(ms))  # now ms contains 1 mesh
-    # instead of len(ms) you can also use:
-    # print(ms.number_meshes())
+#     # print(len(ms))  # now ms contains 1 mesh
+#     # instead of len(ms) you can also use:
+#     # print(ms.number_meshes())
 
-    # print(ms.current_mesh().vertex_number())
+#     # print(ms.current_mesh().vertex_number())
 
-    ms.compute_normal_for_point_clouds()
+#     ms.compute_normal_for_point_clouds()
 
-    # generate_surface_reconstruction_screened_poisson
-    ms.generate_surface_reconstruction_screened_poisson(depth=5)
+#     # generate_surface_reconstruction_screened_poisson
+#     ms.generate_surface_reconstruction_screened_poisson(depth=5)
 
-    # taubin_smooth
-    ms.apply_coord_taubin_smoothing(stepsmoothnum=100, lambda_=0.5, mu=-0.43)
+#     # taubin_smooth
+#     ms.apply_coord_taubin_smoothing(stepsmoothnum=100, lambda_=0.5, mu=-0.43)
 
-    # decimate
-    ms.meshing_decimation_quadric_edge_collapse(targetfacenum=0, targetperc=0.1)
+#     # decimate
+#     ms.meshing_decimation_quadric_edge_collapse(targetfacenum=0, targetperc=0.1)
 
-    # save the mesh
-    ms.save_current_mesh(dem_dir + str(curr_cp).split(".")[0] + ".stl")
+#     # save the mesh
+#     ms.save_current_mesh(dem_dir + str(curr_cp).split(".")[0] + ".stl")
 
 
 def surface_reconstruct_voxel(input_data, C_pipe, curr_cp, surf_pc_dir, dem_dir, opts):
@@ -465,7 +465,7 @@ def surface_reconstruct_voxel(input_data, C_pipe, curr_cp, surf_pc_dir, dem_dir,
     #     poly_data = utils.read_file(dem_dir + str(curr_cp).split(".")[0] + ".stl")
     
     # if SurfaceReconstructionMethod.VOXEL.name == impl:
-    smooth_meshlab(surf_pc_dir + str(curr_cp).split(".")[0] + ".ply", dem_dir, opts)
+    # smooth_meshlab(surf_pc_dir + str(curr_cp).split(".")[0] + ".ply", dem_dir, opts)
     poly_data = utils.read_file(dem_dir + str(curr_cp).split(".")[0] + ".stl")
 
     return poly_data

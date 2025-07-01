@@ -371,8 +371,7 @@ class Start(QtWidgets.QMainWindow):
         return True
 
 
-if __name__ == "__main__":
-
+def main():
     # create app data for storing config and logs
     if not os.path.exists(Config.APP_DATA_DIR):
         os.makedirs(Config.APP_DATA_DIR)
@@ -388,3 +387,7 @@ if __name__ == "__main__":
     start = Start()
 
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()
