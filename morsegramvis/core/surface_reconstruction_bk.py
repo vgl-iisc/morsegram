@@ -15,8 +15,8 @@ class SurfaceReconstructionMethod(Enum):
     '''
     Enum for surface reconstruction method
     '''
-    VOXEL       = 0         # voxel model
-    VTK         = 1         # vtk
+    VTK         = 0         # vtk
+    # VOXEL       = 1         # voxel model
     # MESH_LAB    = 2         # meshlab
     # SCIPY       = 3         # scipy
 
@@ -196,8 +196,8 @@ def surface_reconstruction(task, cb):
 
         polydata = smooth.GetOutput()
 
-    elif SurfaceReconstructionMethod.VOXEL.name == task.sr_method:
-        polydata = surface_reconstruct_voxel(input_data, cb, curr_cp, task.surf_pc_dir, task.dem_dir, task.opts)
+    # elif SurfaceReconstructionMethod.VOXEL.name == task.sr_method:
+    #     polydata = surface_reconstruct_voxel(input_data, cb, curr_cp, task.surf_pc_dir, task.dem_dir, task.opts)
 
     fileutil.save_to_vtp(polydata, task.dest_dir + str(curr_cp).split(".")[0] + ".vtp", task.color)
 

@@ -44,20 +44,12 @@ Visualization and Analysis tool for MorseGram.
    ```sh
    pip install -r requirements.txt
    ```
-4. (Optional) Install the project as a package (for easy imports and CLI):
-   ```sh
-   pip install -e .
-   ```
 
 ## Quick Start
 
 After installation, you can launch the application with:
 ```sh
 python start.py
-```
-Or, if installed as a package:
-```sh
-morsegramvis
 ```
 
 ## Usage
