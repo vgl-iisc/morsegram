@@ -3,27 +3,6 @@
 ## Description
 Visualization and Analysis tool for MorseGram.
 
-## UI
-
-**Figure 1: Start Window**
-
-![Start Window](assets/ui_start.png)
-
-**Figure 2: Configure Window**
-
-![Configure Window](assets/ui_configure.png)
-
-**Figure 3: Surface Reconstruction Window**
-
-![Surface Reconstruction Window](assets/ui_sr.png)
-
-**Figure 4: Insights Window**
-
-![Insights Window](assets/ui_insights.png)
-
-**Figure 5: Miscellaneous Tools Window**
-
-![Miscellaneous Tools Window](assets/ui_mt.png)
 
 ## Prerequisites
 - Python 3.8 or higher
@@ -56,6 +35,41 @@ python start.py
 
 1. Make sure the virtual environment is activated.
 2. Run the project: `python start.py`
+
+## Dataset folder structure
+
+The dataset folder(output of Morsegram) should contains as follows:
+
+```
+dataset/
+├── sample_segmentation.vtp
+├── sample_connectivity_network.vtp
+├── sample_contact_regions.vtp
+├── sample_grain_centres.vtp
+├── sample_contacts.vtp
+```
+
+## UI
+
+**Figure 1: Start Window**
+
+![Start Window](assets/ui_start.png)
+
+**Figure 2: Configure Window**
+
+![Configure Window](assets/ui_configure.png)
+
+**Figure 3: Surface Reconstruction Window**
+
+![Surface Reconstruction Window](assets/ui_sr.png)
+
+**Figure 4: Insights Window**
+
+![Insights Window](assets/ui_insights.png)
+
+**Figure 5: Miscellaneous Tools Window**
+
+![Miscellaneous Tools Window](assets/ui_mt.png)
 
 ## Getting Started with Visualization
 
@@ -219,9 +233,6 @@ During the training process, the GNN model will learn to classify undersegmented
 1. Fork the repository and create a new branch.
 2. Make your changes and commit them.
 3. Push to your fork and open a pull request.
-
-## License
-Specify your license here (e.g., MIT, GPL, etc.)
 
 ## Contact
 
