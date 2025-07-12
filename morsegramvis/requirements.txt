@@ -8,7 +8,6 @@ plotly
 alphashape
 SimpleITK
 numba
-pymeshlab
 pandas
 h5py
 tqdm

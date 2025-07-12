@@ -771,7 +771,51 @@ class SurfaceReconstructionForm(form_nav.Form_Nav):
         '''
         Show the advanced options
         '''
-        if self.sr_method.currentText() == surface_reconstruction_bk.SurfaceReconstructionMethod.VOXEL.name:
+        if self.sr_method.currentText() == surface_reconstruction_bk.SurfaceReconstructionMethod.VTK.name:
+            # dialog with alpha
+            dialog = QtWidgets.QDialog()
+            dialog.setWindowTitle("Advanced Options")
+            dialog.setWindowModality(QtCore.Qt.ApplicationModal)
+            dialog.resize(200, 180)
+            dialog.setLayout(QtWidgets.QVBoxLayout())
+
+            # alpha
+            alpha_label = QtWidgets.QLabel("Alpha")
+            alpha_input = QtWidgets.QLineEdit()
+            alpha_input.setText(str(self.VTK_ALPHA))
+            alpha_input.setValidator(QtGui.QDoubleValidator())
+            alpha_input.setFixedWidth(50)
+            alpha_input.setFixedHeight(30)
+            alpha_input.textChanged.connect(lambda: self.update_vtk_alpha(alpha_input.text()))
+
+            # iterations
+            iterations_label = QtWidgets.QLabel("Iterations")
+            iterations_input = QtWidgets.QLineEdit()
+            iterations_input.setText(str(self.VTK_ITERATIONS))
+            iterations_input.setValidator(QtGui.QIntValidator())
+            iterations_input.setFixedWidth(50)
+            iterations_input.setFixedHeight(30)
+            iterations_input.textChanged.connect(lambda: self.update_vtk_iterations(iterations_input.text()))
+
+            # add the widgets to the layout
+            hl = QtWidgets.QHBoxLayout()
+            hl.addWidget(alpha_label, alignment=QtCore.Qt.AlignCenter)
+            hl.addWidget(alpha_input, alignment=QtCore.Qt.AlignLeft)
+            dialog.layout().addLayout(hl)
+
+            hl = QtWidgets.QHBoxLayout()
+            hl.addWidget(iterations_label, alignment=QtCore.Qt.AlignCenter)
+            hl.addWidget(iterations_input, alignment=QtCore.Qt.AlignLeft)
+            dialog.layout().addLayout(hl)
+
+            # ok button
+            ok_button = QtWidgets.QPushButton("OK")
+            ok_button.clicked.connect(dialog.close)
+            dialog.layout().addWidget(ok_button, alignment=QtCore.Qt.AlignCenter)
+
+            dialog.exec()
+
+        elif self.sr_method.currentText() == surface_reconstruction_bk.SurfaceReconstructionMethod.VOXEL.name:
             # dialog with alpha, beta, iterations values
             dialog = QtWidgets.QDialog()
             dialog.setWindowTitle("Advanced Options")
@@ -815,50 +859,6 @@ class SurfaceReconstructionForm(form_nav.Form_Nav):
             hl = QtWidgets.QHBoxLayout()
             hl.addWidget(beta_label, alignment=QtCore.Qt.AlignCenter)
             hl.addWidget(beta_input, alignment=QtCore.Qt.AlignLeft)
-            dialog.layout().addLayout(hl)
-
-            hl = QtWidgets.QHBoxLayout()
-            hl.addWidget(iterations_label, alignment=QtCore.Qt.AlignCenter)
-            hl.addWidget(iterations_input, alignment=QtCore.Qt.AlignLeft)
-            dialog.layout().addLayout(hl)
-
-            # ok button
-            ok_button = QtWidgets.QPushButton("OK")
-            ok_button.clicked.connect(dialog.close)
-            dialog.layout().addWidget(ok_button, alignment=QtCore.Qt.AlignCenter)
-
-            dialog.exec()
-        
-        elif self.sr_method.currentText() == surface_reconstruction_bk.SurfaceReconstructionMethod.VTK.name:
-            # dialog with alpha
-            dialog = QtWidgets.QDialog()
-            dialog.setWindowTitle("Advanced Options")
-            dialog.setWindowModality(QtCore.Qt.ApplicationModal)
-            dialog.resize(200, 180)
-            dialog.setLayout(QtWidgets.QVBoxLayout())
-
-            # alpha
-            alpha_label = QtWidgets.QLabel("Alpha")
-            alpha_input = QtWidgets.QLineEdit()
-            alpha_input.setText(str(self.VTK_ALPHA))
-            alpha_input.setValidator(QtGui.QDoubleValidator())
-            alpha_input.setFixedWidth(50)
-            alpha_input.setFixedHeight(30)
-            alpha_input.textChanged.connect(lambda: self.update_vtk_alpha(alpha_input.text()))
-
-            # iterations
-            iterations_label = QtWidgets.QLabel("Iterations")
-            iterations_input = QtWidgets.QLineEdit()
-            iterations_input.setText(str(self.VTK_ITERATIONS))
-            iterations_input.setValidator(QtGui.QIntValidator())
-            iterations_input.setFixedWidth(50)
-            iterations_input.setFixedHeight(30)
-            iterations_input.textChanged.connect(lambda: self.update_vtk_iterations(iterations_input.text()))
-
-            # add the widgets to the layout
-            hl = QtWidgets.QHBoxLayout()
-            hl.addWidget(alpha_label, alignment=QtCore.Qt.AlignCenter)
-            hl.addWidget(alpha_input, alignment=QtCore.Qt.AlignLeft)
             dialog.layout().addLayout(hl)
 
             hl = QtWidgets.QHBoxLayout()
