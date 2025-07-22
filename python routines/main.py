@@ -10,7 +10,7 @@ from tkinter.filedialog import askopenfilename
 # PYMS3d related modules
 from convert_store_data import write_polydata, write_img_from_arr
 from persistence_calculation import compute_pers_diagm
-import pyms3d
+import pyms3d_core as pyms3d
 from utilities import bimode_log_min, check_segmentation
 from utilities import get_dims, read_msc_to_img
 from utilities import get_saddles, compute_contact_regions
@@ -84,7 +84,7 @@ def initial_msc(data_file_name, dim, msc_file_name, output_path_name):
     '''
     print("Computing initial Morse-Smale Complex")
         # compute the mscomplex
-    msc = pyms3d.mscomplex()
+    msc = pyms3d.MsComplexPyms3D()
         # compute the mscomplex from a structured grid with scalars
     msc.compute_bin(data_file_name, dim)
         # save the initial Morse-Smale complex
@@ -217,6 +217,8 @@ while(True):
                            base_name + '_segmentation.vtp')
         break
 
+    print(pyms3d.get_hw_info())
+
     val = int(input("1. Display Persistence Curve\n"
                     "2. Compute initial Morse-Smale Complex\n"
                     "3  Simplify Morse-Smale Complex\n"
@@ -306,4 +308,5 @@ while(True):
         print("Compute the Simplified Morse-Smale Complex")
     
     if (val == 9):
+        print("exiting")
         break

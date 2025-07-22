@@ -356,9 +356,11 @@ def compute_contact_regions(msc, image, isDesManifold=True):
 
     # get the coordinates of primal points
     primal_pts = msc.primal_points()
+    print("got primal points")
 
     # get the 2 saddle points
     cps_2sad = msc.cps(2)
+    print("got 2-saddles")
 
     # initialize vtk data type
     cp_ids = vtk.vtkIntArray()
@@ -598,10 +600,18 @@ def get_cp(msc, cp_type):
     """
     req_cps = msc.cps(cp_type)
     cpList = []
+    print(len(req_cps))
     for m in req_cps:
         if(msc.cp_func(m) > 0):
-            cpList.append((msc.cp_cellid(m), 3, msc.cp_func(m), m))
+            cpList.append((msc.cp_cellid(m), cp_type, msc.cp_func(m), m))
     cpList = list(set(cpList))
+    print("done creating cpList of size", len(cpList))
+
+    # TODO: determine why this differs from the above, and whether it is better
+    # cell_ids = msc.cps_cellid()[req_cps]
+    # funcs = msc.cps_func()[req_cps]
+    # cpList2 = [(tuple(id), cp_type, fn, i) for i, (id, fn) in enumerate(zip(cell_ids, funcs)) if fn > 0]
+    # cpList2 = list(set(cpList2))
 
     # create the vtk objects
     pa, ia = vtk.vtkPoints(), vtk.vtkIntArray()
@@ -886,12 +896,16 @@ def read_msc_to_img(msc, dim):
     Returns:
         np array: numpy array of the function value at msc vertices
     """
-    np_arr = np.zeros(dim)
-    for x in range(dim[0]):
-        for y in range(dim[1]):
-            for z in range(dim[2]):
-                # scalar value at the vertex coordinate
-                np_arr[x, y, z] = msc.vert_func(x, y, z)
+    # np_arr = np.zeros(dim)
+    # for x in range(dim[0]):
+    #     for y in range(dim[1]):
+    #         for z in range(dim[2]):
+    #             # scalar value at the vertex coordinate
+    #             np_arr[x, y, z] = msc.vert_func(x, y, z)
+
+    # reorder from [z, y, x] to the desired [x, y, z]
+    np_arr = msc.vert_funcs(dim[0], dim[1], dim[2]).transpose((2, 1, 0))
+
     return np_arr  # flatten order - F
 
 

@@ -1,4 +1,4 @@
-import pyms3d
+import pyms3d_core as pyms3d
 import numpy as np
 import matplotlib.pyplot as plt
 import kneed
@@ -18,7 +18,7 @@ def compute_pers_diagm(data_file_name, dim, mode):
         float: knee point
     """
     # Comput msc
-    msc = pyms3d.mscomplex()
+    msc = pyms3d.MsComplexPyms3D()
     msc.compute_bin(data_file_name, dim)
     # simplify for base case
     msc.simplify_pers(thresh=0.0, is_nrm=True)
@@ -81,7 +81,7 @@ def compute_pers_diagm(data_file_name, dim, mode):
         plt.xlabel("Persistence")
         plt.ylabel("Survived critical points")
         plt.title("Persistence curve")
-        plt.savefig("../Outputs/pd_" + str(datetime.now()) + ".svg")
+        plt.savefig("../Outputs/pd_" + str(datetime.now()).replace(":","-") + ".svg")
 
         return None
 
