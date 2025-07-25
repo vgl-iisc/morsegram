@@ -17,7 +17,7 @@ import vtk
 import vtk.util.numpy_support as nps
 import time
 import multiproc
-from multiprocessing import Process, cpu_count
+from multiprocessing import Pool, cpu_count, Process
 from tqdm import tqdm
 import shutil
 
@@ -371,17 +371,13 @@ def compute_contact_regions(msc, image, isDesManifold=True):
     des_man_pts.SetData(nps.numpy_to_vtk(primal_pts, "Pts"))
     des_man_quads = vtk.vtkCellArray()
 
-    start_time = time.time()
-
     num_proc = cpu_count()
     print("Number of processors: ", num_proc)
 
     proc_works = [[] for i in range(num_proc)]
     for i, m in enumerate(cps_2sad):
         proc_works[i % num_proc].append(m)
-    
-    list_procs = []
-
+        
     # create a folder for saddle
     saddle2_folder = '../Outputs/Saddle2'
 
@@ -389,23 +385,13 @@ def compute_contact_regions(msc, image, isDesManifold=True):
         shutil.rmtree(saddle2_folder)
 
     os.makedirs(saddle2_folder)
-    
 
+    args = []
     for i in range(num_proc):
-        l_p = Process(target=multiproc.contact_region_task, args=(i, saddle2_folder, 
-                            proc_works[i], msc, primal_pts, image, isDesManifold))
-        list_procs.append(l_p)
-        l_p.start()
-        print("Started process ", i)
+        args.append((i, saddle2_folder, proc_works[i], msc, primal_pts, image, isDesManifold))
     
-    for l_p in list_procs:
-        l_p.join()
-        print("Joined process ", l_p.pid)
-
-    # terminate all the processes
-    for l_p in list_procs:
-        l_p.terminate()
-        print("Terminated process ", l_p.pid)
+    pool = Pool(num_proc)
+    pool.starmap(multiproc.contact_region_task, args)
 
     surv_sads = []
 
