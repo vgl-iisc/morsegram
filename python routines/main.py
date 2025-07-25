@@ -18,26 +18,6 @@ from utilities import get_cp, get_extremum_graph
 from utilities import get_segmentation_index_dual
 import pandas as pd
 
-# get the arguments from command line -- data_file
-parser = argparse.ArgumentParser()
-parser.add_argument('data_file', type=str, help='raw distance field file name')
-parser.add_argument('--mode', type=str, help='automatic / manual pipeline', required=False, default="manual")
-
-# capture the arguments in args
-args = parser.parse_args()
-data_file_name, dim = args.data_file, get_dims(args.data_file)
-
-# get the base name for storing other variables
-base_name = os.path.splitext(os.path.basename(data_file_name))[0]
-
-msc_file_name = 'msc_' + base_name + '_initial'
-
-# output path name -- if not make the output path directory
-output_path_name = '../Outputs/'
-if not os.path.exists(output_path_name):
-    os.makedirs(output_path_name)
-
-
 def disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, mode):
     '''
     Display the persistence curve
@@ -204,109 +184,128 @@ def compute_seg(base_name, output_path_name, msc, img):
     return segmentation,centers,maximas,labs,vols
 
 
-while(True):
+if __name__ == "__main__":
+    # get the arguments from command line -- data_file
+    parser = argparse.ArgumentParser()
+    parser.add_argument('data_file', type=str, help='raw distance field file name')
+    parser.add_argument('--mode', type=str, help='automatic / manual pipeline', required=False, default="manual")
 
-    # this if statement is for the auto mode of the program
-    if args.mode == "auto":
-        percent_pers = disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, args.mode)
-        msc = initial_msc(data_file_name, dim, msc_file_name, output_path_name)
-        img = simplify_msc(dim, percent_pers, msc)
-        maxs = compute_contact_reg(base_name, output_path_name, msc, img)
-        segmentation = get_segmentation_index_dual(msc, img, "VTP")
-        write_polydata(segmentation, output_path_name +
-                           base_name + '_segmentation.vtp')
-        break
+    # capture the arguments in args
+    args = parser.parse_args()
+    data_file_name, dim = args.data_file, get_dims(args.data_file)
 
-    print(pyms3d.get_hw_info())
+    # get the base name for storing other variables
+    base_name = os.path.splitext(os.path.basename(data_file_name))[0]
 
-    val = int(input("1. Display Persistence Curve\n"
-                    "2. Compute initial Morse-Smale Complex\n"
-                    "3  Simplify Morse-Smale Complex\n"
-                    "4. Compute Contact Information\n"
-                    "5. Compute Segmentation\n"
-                    "6. Clean Up Segmentation\n"
-                    "7. Check Segmentation\n"
-                    "8. Load Stored MSC\n"
-                    "9. Exit\n"))
+    msc_file_name = 'msc_' + base_name + '_initial'
 
-    if (val == 1):
-        percent_pers = disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, args.mode)
-    if (val == 2):
-        msc = initial_msc(data_file_name, dim, msc_file_name, output_path_name)
-    if (val == 3):
-        img = simplify_msc(dim, percent_pers, msc)
-    if(val == 4):
-        maxs = compute_contact_reg(base_name, output_path_name, msc, img)
-    if(val == 5):
-        segmentation, centers, maximas, labs, vols = compute_seg(base_name, output_path_name, msc, img)
-
-    if (val == 6):
-        print("Cleaning up the segmentation")
-        del_list = []
-        plt.figure()
-        plt.hist(np.log(vols), bins=30)
-        plt.show()
-
-        vol_cutoff = float(input('The cutoff value: '))  # bimode_log_min(vols)
-        # print(f'Volume cutoff is: {vol_cutoff}')
-        for ii, mid in enumerate(labs):
-            if (mid not in maxs) and (vols[ii] < vol_cutoff):
-                segmentation[segmentation == mid] = 0
-                del_list.append(ii)
-
-        print(f'Number of deleted labels: {len(del_list)}')
-        centers = [centers[ii]
-                   for ii in range(len(centers)) if ii not in del_list]
-        maximas = [maximas[ii]
-                   for ii in range(len(maximas)) if ii not in del_list]
-        labs = [labs[ii] for ii in range(len(labs)) if ii not in del_list]
-        vols = [vols[ii] for ii in range(len(vols)) if ii not in del_list]
-        print(f'Number of labels: {len(labs)}')
-
-        pa1, pa2, ia, fa = vtk.vtkPoints(), vtk.vtkPoints(),\
-            vtk.vtkIntArray(), vtk.vtkFloatArray()
-        ca = vtk.vtkCellArray()
-        ia.SetName("Label")
-        fa.SetName("Volume")
-        for i, (center, maxima, lab, vol)\
-                in enumerate(zip(centers, maximas, labs, vols)):
-            pa1.InsertNextPoint(center)
-            pa2.InsertNextPoint(maxima)
-            ia.InsertNextValue(lab)
-            fa.InsertNextValue(vol)
-            ca.InsertNextCell(1)
-            ca.InsertCellPoint(i)
-        pd = vtk.vtkPolyData()
-        pd.SetPoints(pa2)
-        pd.SetVerts(ca)
-        pd.GetPointData().AddArray(ia)
-        pd.GetPointData().AddArray(fa)
-        write_polydata(pd, output_path_name +
-                       base_name + "_LabelProperties.vtp")
-        write_img_from_arr(
-            segmentation, output_path_name + base_name + '_Segmentation')
-
-    if (val == 7):
-        print('Writing marked images in files: ', '( ', base_name, ' )')
-        root = tk.Tk()
-        root.withdraw()
-        raw_file_name = askopenfilename(
-            initialdir='./convert_downsample', title='Select mhd raw file')
-        check_segmentation(raw_file_name, centers)
-
-    if (val == 8):
-        root = tk.Tk()
-        root.withdraw()
-        file_name = askopenfilename(
-            initialdir='../Outputs', title='Select initial Morse complex file')
-        # file_name = input("Enter Path For Initial Morse-Smale Complex: \n")
-        msc = pyms3d.mscomplex()
-        msc.load(file_name)
-        with open(output_path_name + msc_file_name + '.txt', 'r') as f:
-            percent_pers = float(f.read())
-            print("The last stored persistence threshold is: ", percent_pers)
-        print("Compute the Simplified Morse-Smale Complex")
+    # output path name -- if not make the output path directory
+    output_path_name = '../Outputs/'
+    if not os.path.exists(output_path_name):
+        os.makedirs(output_path_name)
     
-    if (val == 9):
-        print("exiting")
-        break
+    while(True):
+        # this if statement is for the auto mode of the program
+        if args.mode == "auto":
+            percent_pers = disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, args.mode)
+            msc = initial_msc(data_file_name, dim, msc_file_name, output_path_name)
+            img = simplify_msc(dim, percent_pers, msc)
+            maxs = compute_contact_reg(base_name, output_path_name, msc, img)
+            segmentation = get_segmentation_index_dual(msc, img, "VTP")
+            write_polydata(segmentation, output_path_name +
+                            base_name + '_segmentation.vtp')
+            break
+
+        print(pyms3d.get_hw_info())
+
+        val = int(input("1. Display Persistence Curve\n"
+                        "2. Compute initial Morse-Smale Complex\n"
+                        "3  Simplify Morse-Smale Complex\n"
+                        "4. Compute Contact Information\n"
+                        "5. Compute Segmentation\n"
+                        "6. Clean Up Segmentation\n"
+                        "7. Check Segmentation\n"
+                        "8. Load Stored MSC\n"
+                        "9. Exit\n"))
+
+        if (val == 1):
+            percent_pers = disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, args.mode)
+        if (val == 2):
+            msc = initial_msc(data_file_name, dim, msc_file_name, output_path_name)
+        if (val == 3):
+            img = simplify_msc(dim, percent_pers, msc)
+        if(val == 4):
+            maxs = compute_contact_reg(base_name, output_path_name, msc, img)
+        if(val == 5):
+            segmentation, centers, maximas, labs, vols = compute_seg(base_name, output_path_name, msc, img)
+
+        if (val == 6):
+            print("Cleaning up the segmentation")
+            del_list = []
+            plt.figure()
+            plt.hist(np.log(vols), bins=30)
+            plt.show()
+
+            vol_cutoff = float(input('The cutoff value: '))  # bimode_log_min(vols)
+            # print(f'Volume cutoff is: {vol_cutoff}')
+            for ii, mid in enumerate(labs):
+                if (mid not in maxs) and (vols[ii] < vol_cutoff):
+                    segmentation[segmentation == mid] = 0
+                    del_list.append(ii)
+
+            print(f'Number of deleted labels: {len(del_list)}')
+            centers = [centers[ii]
+                    for ii in range(len(centers)) if ii not in del_list]
+            maximas = [maximas[ii]
+                    for ii in range(len(maximas)) if ii not in del_list]
+            labs = [labs[ii] for ii in range(len(labs)) if ii not in del_list]
+            vols = [vols[ii] for ii in range(len(vols)) if ii not in del_list]
+            print(f'Number of labels: {len(labs)}')
+
+            pa1, pa2, ia, fa = vtk.vtkPoints(), vtk.vtkPoints(),\
+                vtk.vtkIntArray(), vtk.vtkFloatArray()
+            ca = vtk.vtkCellArray()
+            ia.SetName("Label")
+            fa.SetName("Volume")
+            for i, (center, maxima, lab, vol)\
+                    in enumerate(zip(centers, maximas, labs, vols)):
+                pa1.InsertNextPoint(center)
+                pa2.InsertNextPoint(maxima)
+                ia.InsertNextValue(lab)
+                fa.InsertNextValue(vol)
+                ca.InsertNextCell(1)
+                ca.InsertCellPoint(i)
+            pd = vtk.vtkPolyData()
+            pd.SetPoints(pa2)
+            pd.SetVerts(ca)
+            pd.GetPointData().AddArray(ia)
+            pd.GetPointData().AddArray(fa)
+            write_polydata(pd, output_path_name +
+                        base_name + "_LabelProperties.vtp")
+            write_img_from_arr(
+                segmentation, output_path_name + base_name + '_Segmentation')
+
+        if (val == 7):
+            print('Writing marked images in files: ', '( ', base_name, ' )')
+            root = tk.Tk()
+            root.withdraw()
+            raw_file_name = askopenfilename(
+                initialdir='./convert_downsample', title='Select mhd raw file')
+            check_segmentation(raw_file_name, centers)
+
+        if (val == 8):
+            root = tk.Tk()
+            root.withdraw()
+            file_name = askopenfilename(
+                initialdir='../Outputs', title='Select initial Morse complex file')
+            # file_name = input("Enter Path For Initial Morse-Smale Complex: \n")
+            msc = pyms3d.mscomplex()
+            msc.load(file_name)
+            with open(output_path_name + msc_file_name + '.txt', 'r') as f:
+                percent_pers = float(f.read())
+                print("The last stored persistence threshold is: ", percent_pers)
+            print("Compute the Simplified Morse-Smale Complex")
+        
+        if (val == 9):
+            print("exiting")
+            break

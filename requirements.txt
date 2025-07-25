@@ -10,3 +10,4 @@ SimpleITK==2.2.0
 vtk==9.1.0
 tqdm==4.46.0
 kneed==0.8.1
+tqdm
