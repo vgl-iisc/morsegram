@@ -1,18 +1,25 @@
-# Description
+# MorseGram #
 
-This repository contains the code for discrete Morse theory based segmentation
-of three dimensional X-ray computed tomography data of (cemented)
-granular/discrete material systems. The code is based on the method described in the paper: 
 
-Karran Pandey, Talha Bin Masood, Saurabh Singh, Ingrid Hotz, Vijay Natarajan, and Tejas G. Murthy.
+This repository contains code to compute a discrete Morse theory based segmentation of three dimensional X-ray computed tomography data of granular/discrete material systems. It also includes MorseGramVis, a tool that supports visualization and analysis of the segmentation and contact network produced by MorseGram. The code is based on the method described in the paper: 
 
-Morse theory-based segmentation and fabric quantification of granular materials.
+Karran Pandey, Talha Bin Masood, Saurabh Singh, Ingrid Hotz, Vijay Natarajan, and Tejas G. Murthy.  
+Morse theory-based segmentation and fabric quantification of granular materials.  
+Granular Matter, 24(1), 2022, 27:1-20.  
+https://doi.org/10.1007/s10035-021-01182-7  
+[[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)  
 
-Granular Matter, 24(1), 2022, 27:1-20.
-
-https://doi.org/10.1007/s10035-021-01182-7
-
-[[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)
+@article{pandey2022morse,  
+  title={Morse theory-based segmentation and fabric quantification of granular materials},  
+  author={Pandey, Karran and Bin Masood, Talha and Singh, Saurabh and Hotz, Ingrid and Natarajan, Vijay and Murthy, Tejas G},  
+  journal={Granular Matter},  
+  volume={24},  
+  number={1},  
+  pages={27},  
+  year={2022},  
+  doi = {https://doi.org/10.1007/s10035-021-01182-7},  
+  publisher={Springer}  
+}  
 
 An earlier version of this repository which was used to obtain the results in the paper can also be found [here](https://github.com/karran13/Granular-Material-Packing-Analysis).
 
