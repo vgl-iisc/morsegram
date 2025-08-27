@@ -18,7 +18,7 @@ def compute_pers_diagm(data_file_name, dim, mode):
         float: knee point
     """
     # Comput msc
-    msc = pyms3d.MsComplexPyms3D()
+    msc = pyms3d.MsComplex()
     msc.compute_bin(data_file_name, dim)
     # simplify for base case
     msc.simplify_pers(thresh=0.0, is_nrm=True)

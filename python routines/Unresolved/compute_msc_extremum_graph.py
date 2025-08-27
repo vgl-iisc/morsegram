@@ -43,7 +43,7 @@ DataFile = data_file_name
 msc_computed=0
 
 if(msc_computed==0):
-    print pyms3d.get_hw_info()
+    print pyms3d.select_device()
     msc = pyms3d.mscomplex()
     msc.compute_bin(DataFile,Dim)
     msc.simplify_pers(thresh=percent_pers,is_nrm=False)

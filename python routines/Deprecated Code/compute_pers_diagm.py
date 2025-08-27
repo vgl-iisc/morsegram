@@ -40,7 +40,7 @@ msc_file_name='msc_'+ base_name + '_unsimplified'
 
 DataFile = data_file_name
 
-print(pyms3d.get_hw_info())
+print(pyms3d.select_device())
 msc = pyms3d.mscomplex()
 msc.compute_bin(DataFile,Dim)
 

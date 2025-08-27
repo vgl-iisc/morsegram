@@ -64,7 +64,7 @@ def initial_msc(data_file_name, dim, msc_file_name, output_path_name):
     '''
     print("Computing initial Morse-Smale Complex")
         # compute the mscomplex
-    msc = pyms3d.MsComplexPyms3D()
+    msc = pyms3d.MsComplex()
         # compute the mscomplex from a structured grid with scalars
     msc.compute_bin(data_file_name, dim)
         # save the initial Morse-Smale complex
@@ -216,7 +216,7 @@ if __name__ == "__main__":
                             base_name + '_segmentation.vtp')
             break
 
-        print(pyms3d.get_hw_info())
+        print(pyms3d.select_device())
 
         val = int(input("1. Display Persistence Curve\n"
                         "2. Compute initial Morse-Smale Complex\n"

@@ -52,7 +52,7 @@ base_name=os.path.splitext(base_name)[0]
 
 msc_file_name='msc_'+ base_name + '_unsimplified'
 
-#print(pyms3d.get_hw_info())
+#print(pyms3d.select_device())
 
 output_path_name='../Outputs/'
 if not os.path.exists(output_path_name):
