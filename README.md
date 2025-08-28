@@ -7,7 +7,9 @@ Karran Pandey, Talha Bin Masood, Saurabh Singh, Ingrid Hotz, Vijay Natarajan, an
 Morse theory-based segmentation and fabric quantification of granular materials.  
 Granular Matter, 24(1), 2022, 27:1-20.  
 https://doi.org/10.1007/s10035-021-01182-7  
-[[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)  
+[[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)    
+
+Please cite this publication if you use this method or the library in your work:
 
 @article{pandey2022morse,  
   title={Morse theory-based segmentation and fabric quantification of granular materials},  
@@ -19,115 +21,29 @@ https://doi.org/10.1007/s10035-021-01182-7
   year={2022},  
   doi = {https://doi.org/10.1007/s10035-021-01182-7},  
   publisher={Springer}  
-}  
+}
 
 An earlier version of this repository which was used to obtain the results in the paper can also be found [here](https://github.com/karran13/Granular-Material-Packing-Analysis).
 
----
-# Requirements
+# Dependencies
 
-To compile and execute this code, you will need following libraries:
+## Installing PyMS3D
 
-1. Cmake
-2. Boost
-3. OpenCL 1.1
-4. OpenMP
-5. CUDA > 10.1
+This implementation depends extensively on the [PyMS3D python package](https://github.com/vgl-iisc/mscomplex3d), which must be installed in your python environment prior to running the pipeline. Please follow the steps under the "Building and Installing" section in [the readme file](https://github.com/vgl-iisc/mscomplex3d/blob/main/Readme.md).
 
-## Tested on / System requirements
+## Installing Python Dependencies
 
-    Ubuntu 20.04 LTS
-    Python 3.8
+The `requirements.txt` file contains a summary of all required dependencies. With your PyMS3D python environment active, run the following command:
 
----
-
-# Instructions
-
-## Prerequisite installation
-
-* Install Cmake, Boost using your software package manager
-* If your gpu is Cuda compatible, follow the detailed installation instructions [here](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html). Or install opencl from your software package manager. Check if opencl is working with clinfo. If you get "number of platform 0", it means opencl is not working correctly. Fix the installation of opencl.
-* OpenMP should be normally installed if not use your package manager to install openmp libraries.
-* Install python packages, specifically numpy as it will be used for building the pyms3d module.
-* Install cmake-gui for building pyms3d.
-
-## Building / Installing pyms3d
-
-The MS-Complex computation is done using pyms3d. You can either run bash script [here](./build_pyms3d.sh) to build pyms3d.
-
-```sh
-./build_pyms3d.sh
+```bash
+$ pip install -r requirements.txt
 ```
 
+If everything installs correctly, you should be ready to run the pipeline.
 
----
-Or follow the steps below to build pyms3d manually:
+# Running the Pipeline
 
-* Clone the repository
-
-```sh
-git clone https://bitbucket.org/vgl_iisc/mscomplex-3d.git
-```
-
-* Navigate to mscomplex-3d, and download submodule and create <i>build</i> and <i>install</i> directories
-
- ```sh
- cd mscomplex-3d/
- git submodule update --init --recursive
- mkdir build install
- cd build
- ```
-
-* Build pyms3d using cmake-gui
-
- ```sh
- cmake-gui
- ```
-
-  1. In the cmake-gui, provide the path for
-      - source code ---> absolute path to mscomplex-3d
-      - build directory ---> absolute path to mscomplex-3d/build
-  2. Press configure to see the default values cmake-gui picked up
-  3. Use advance option and change the default values to something similar to the following
-
-   ![cmake-gui options](./READMEFiles/cmake-gui.png)
-
-  4. Important:
-
-    - Check BUILD_PYMS3D, BUILD_TOOL.
-    - Press configure to update and display new values.
-    - Provide path for MSCOMPLEX3D_INSTALL_DIR, opencl cuda paths, libboost paths, python3 paths.
-    - The path to PYTHON_SITE_PACKAGE_DIR should be "python routines" in the repository folder.
-    - Click generate and close cmake-gui.
-
-* From the build directory, execute the following commands:
-
-    ```sh
-    make -j8
-    make -j8 install
-    ```
-
-   Where 8 is number of processes used to build the pyms3d.
-
-* If everything went alright, you should see <b><i>'pyms3d.so'</i></b> in 'Python Routines' directory.
-* To check whether your installation works, import pyms3d in ipython or jupyter-lab. If import is successful, your installation works.
-
-### By default, pyms3d prefer OpenCL device whose device type is "GPU". If you want to use CPU, you can change the device type to "CPU" in the following way:
-
-* go to [mscomplex-3d/core/OpenCL/grid_dataset_cl.cpp](https://bitbucket.org/vgl_iisc/mscomplex-3d/src/master/core/OpenCL/grid_dataset_cl.cpp), line no. 272
-* change the condition of the "if statement" :
-    
-    from:
-
-    ```cpp
-    devices[j].getInfo<CL_DEVICE_TYPE>() == CL_DEVICE_TYPE_GPU
-    ```
-    to:
-    ```cpp
-    devices[j].getInfo<CL_DEVICE_TYPE>() == CL_DEVICE_TYPE_CPU
-    ```
-    
-* build the pyms3d again.
+All the pipeline scripts are contained within the `python routines` directory, so the rest of this document assumes your terminal's working directory to be set there.
 
 ## Dataset
 
@@ -135,34 +51,32 @@ The test dataset, located in the 'Test Data' folder in the repository, is an mhd
 
 ![](READMEFiles/raw%20data%20vol%20render.png)
 
-## Running the Pipeline
+## Creating the Distance Field
 
-<!-- install the requirements -->
+`distance_field.py` takes as input the raw CT image (multiple formats are to be supported, currently '.mat' ,'.raw' formats are supported) and outputs the distance field based on the extracted boundary. To run the script, execute the following command in the terminal:
 
-Install the requirements using the following command:
-
-    pip install -r requirements.txt
-
-The python scripts to run the pipeline can be found in the Python Routines folder. You should have all the python packages specified above to run the pipeline successfully. The scripts and their input formats are described below:
-
-### distance_field.py
-
-This script takes as input the raw CT image (multiple formats are to be supported, currently '.mat' ,'.raw' formats are supported) and outputs the distance field based on the extracted boundary. To run the script, execute the following command in the terminal:
-
-`python distace_field.py [Path to mat/raw data file] [downscaling factor]`
+`python distance_field.py [Path to mat/raw data file] [downscaling factor]`
 
 eg :
 
 ![](READMEFiles/Screenshot%20from%202022-10-16%2023-37-43.png)
 
-This will store the computed distance field in MetaImage format (.mhd + .raw) in the 'ChamferDistance' folder in the repository. Also a raw data file (.mhd + .raw) is stored in the raw data folder. When visualized in ParaView, the isosurafce with isovalue 0 looks as follows:
+This will store the computed distance field in MetaImage format (.mhd + .raw) in the 'ChamferDistance' folder in the repository. Also a raw data file (.mhd + .raw) is stored in the raw data folder. When visualized in ParaView, the isosurface with isovalue 0 looks as follows:
 
 ![](READMEFiles/bd_surface.png)
 
-### main.py
+Once you have obtained the distance field, the rest of the pipeline can be run in either **auto** or **manual** mode.
 
-This script is the main interface to run the Morse-Smale Complex computation
-and extract relevant geometric and topological structures for analysis. It
+## Auto Mode
+
+The program allows for the automatic computation of the segmentation, connectivity network and contact regions. To run the program in auto mode, execute the following command:
+
+`python main.py --mode auto [Path to .raw file of distance field]`
+
+## Manual Mode
+
+`main.py` is the entrypoint for running the Morse-Smale Complex computation
+and extracting relevant geometric and topological structures for analysis. It
 takes the computed distance field (in .raw format) as input and returns the structures selected from the in-program menu. The program allows for the visualization of the persistence curve, computation/simplification of the MS-Complex and extraction of the segmentation, connectivity network and contact regions in the granular material packing.
 
 `python main.py [Path to .raw file of distance field]`
@@ -174,6 +88,8 @@ eg:
 The program will display the following menu:
 
 ![](READMEFiles/Screenshot%20from%202022-10-16%2023-34-47.png)
+
+> ⚠️ Note: Most of the steps of the pipeline depend upon the previous ones, so they must be run in order.
 
 Running this will store the selected structures in '.mhd' or '.vtp' format (accessible through VTK/ParaView) in the 'Outputs' folder in the repository.
 
@@ -194,36 +110,6 @@ Segmentation:
 Connectivity Network:
 
 ![](READMEFiles/contact_network.png)
-
-
-<!-- auto mode -->
-## Auto Mode
-
-The program also allows for the automatic computation of the segmentation, connectivity network and contact regions. To run the program in auto mode, execute the following command:
-
-`python main.py --mode auto [Path to .raw file of distance field]`
-
-eg:
-
-### Automatic knee detection
-<img src="./READMEFiles/pc.svg">
-
----
-
-# References
-
-For more information about the method, refer to the following paper. Please cite these publications if you use this method or the library in your work.
-
-
-Karran Pandey, Talha Bin Masood, Saurabh Singh, Ingrid Hotz, Vijay Natarajan, and Tejas G. Murthy.
-
-Morse theory-based segmentation and fabric quantification of granular materials.
-
-Granular Matter, 24(1), 2022, 27:1-20.
-
-https://doi.org/10.1007/s10035-021-01182-7
-
-[[Springer Link]](https://link.springer.com/article/10.1007/s10035-021-01182-7)
 
 ---
 
