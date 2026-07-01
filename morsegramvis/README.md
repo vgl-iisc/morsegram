@@ -31,6 +31,11 @@ After installation, you can launch the application with:
 python start.py
 ```
 
+### ⚠️ Note for Linux Environments Using Wayland
+MorsegramVis's OpenGL window environment does not work with the Wayland desktop environment. To work around this, start the program with the QT_QPA_PLATFORM set to 'xcb', as shown below:
+
+`QT_QPA_PLATFORM=xcb python start.py`
+
 ## Usage
 
 1. Make sure the virtual environment is activated.
