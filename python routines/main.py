@@ -299,7 +299,7 @@ if __name__ == "__main__":
             file_name = askopenfilename(
                 initialdir='../Outputs', title='Select initial Morse complex file')
             # file_name = input("Enter Path For Initial Morse-Smale Complex: \n")
-            msc = pyms3d.mscomplex()
+            msc = pyms3d.MsComplex()
             msc.load(file_name)
             with open(output_path_name + msc_file_name + '.txt', 'r') as f:
                 percent_pers = float(f.read())
