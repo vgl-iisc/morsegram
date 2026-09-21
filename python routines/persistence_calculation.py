@@ -68,8 +68,18 @@ def compute_pers_diagm(data_file_name, dim, mode):
 
         plt.figure()
         plt.plot(b_value, d_value, 'r.')
-        plt.plot([0, max(max(b_value), max(d_value))],
-                [0, max(max(b_value), max(d_value))])
+        #plt.plot([0, max(max(b_value), max(d_value))],
+        #        [0, max(max(b_value), max(d_value))])
+        b_value = np.asarray(b_value, dtype=np.float64).ravel()
+        d_value = np.asarray(d_value, dtype=np.float64).ravel()
+
+        plot_limit = float(max(np.max(b_value), np.max(d_value)))
+
+        plt.plot(
+            [0.0, plot_limit],
+            [0.0, plot_limit]
+        )
+        
         plt.xlabel("Birth")
         plt.ylabel("Death")
         plt.title("Persistence diagram")
