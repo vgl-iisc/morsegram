@@ -11,3 +11,4 @@ SimpleITK==2.5.6
 vtk==9.7.0
 tqdm==4.46.0
 kneed==0.8.1
+pandas==3.0.6
