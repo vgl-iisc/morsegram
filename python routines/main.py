@@ -206,6 +206,7 @@ if __name__ == "__main__":
     
     while(True):
         # this if statement is for the auto mode of the program
+        print(pyms3d.select_device())
         if args.mode == "auto":
             percent_pers = disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, args.mode)
             msc = initial_msc(data_file_name, dim, msc_file_name, output_path_name)
@@ -216,7 +217,7 @@ if __name__ == "__main__":
                             base_name + '_segmentation.vtp')
             break
 
-        print(pyms3d.select_device())
+        #print(pyms3d.select_device())
 
         val = int(input("1. Display Persistence Curve\n"
                         "2. Compute initial Morse-Smale Complex\n"
