@@ -1,3 +1,4 @@
+git+https://github.com/vgl-iisc/mscomplex3d.git
 h5py==3.16.0
 itk==5.4.7
 itk_registration==5.4.7
