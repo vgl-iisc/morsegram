@@ -6,7 +6,7 @@ from datetime import datetime
 from scipy.interpolate import UnivariateSpline
 
 
-def compute_pers_diagm(data_file_name, dim, mode):
+def compute_pers_diagm(data_file_name, dim, msc_file_name, output_path_name, mode):
     """Comput the persistence diagram
 
     Args:
@@ -20,6 +20,7 @@ def compute_pers_diagm(data_file_name, dim, mode):
     # Comput msc
     msc = pyms3d.MsComplex()
     msc.compute_bin(data_file_name, dim)
+    msc.save(output_path_name+msc_file_name)
     # simplify for base case
     msc.simplify_pers(thresh=0.0, is_nrm=True)
     # get the critical points
