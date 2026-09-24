@@ -35,7 +35,7 @@ def disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, mode):
     # compute the persistence diagram and curve
     
     # get the persistence threshold
-    percent_pers = compute_pers_diagm(data_file_name, dim, mode)
+    percent_pers = compute_pers_diagm(data_file_name, dim, msc_file_name, output_path_name, mode)
     if mode == "manual":
         percent_pers = float(input("enter the knee point : "))
     else:
