@@ -808,7 +808,7 @@ def get_segmentation_index_dual(msc, img, rtype="VTP"):
             points_ind = np.ravel_multi_index(points.transpose(), img.shape)
             np.put(seg_img, points_ind, m)
             centers.append(np.mean(points, axis=0))
-            maxima.append(np.array(msc.cp_cellid(m), dtype=np.float)/2)
+            maxima.append(np.array(msc.cp_cellid(m), dtype=np.float32)/2)
             labs.append(m)
             vols.append(points.shape[0])
             count += 1

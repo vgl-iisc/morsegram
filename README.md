@@ -113,6 +113,10 @@ Connectivity Network:
 
 ---
 
+## MorseGramVis
+
+MorseGramVis is a visualisation tool for MorseGram. Installation and usage details can be found in the [repository](https://github.com/vgl-iisc/morsegram/tree/main/morsegramvis). 
+
 # Copyright
 
 Copyright (c) 2021 Visualization & Graphics Lab (VGL), Indian Institute of Science. All rights reserved.

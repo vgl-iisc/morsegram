@@ -35,7 +35,7 @@ def disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, mode):
     # compute the persistence diagram and curve
     
     # get the persistence threshold
-    percent_pers = compute_pers_diagm(data_file_name, dim, mode)
+    percent_pers = compute_pers_diagm(data_file_name, dim, msc_file_name, output_path_name, mode)
     if mode == "manual":
         percent_pers = float(input("enter the knee point : "))
     else:
@@ -63,8 +63,14 @@ def initial_msc(data_file_name, dim, msc_file_name, output_path_name):
         msc: initial msc
     '''
     print("Computing initial Morse-Smale Complex")
-        # compute the mscomplex
+    
     msc = pyms3d.MsComplex()
+    
+    if os.path.isfile(output_path_name+msc_file_name):
+        msc.load(output_path_name+msc_file_name)
+        return msc
+    
+        # compute the mscomplex
         # compute the mscomplex from a structured grid with scalars
     msc.compute_bin(data_file_name, dim)
         # save the initial Morse-Smale complex
@@ -206,6 +212,7 @@ if __name__ == "__main__":
     
     while(True):
         # this if statement is for the auto mode of the program
+        print(pyms3d.select_device())
         if args.mode == "auto":
             percent_pers = disp_pers_curve(data_file_name, dim, msc_file_name, output_path_name, args.mode)
             msc = initial_msc(data_file_name, dim, msc_file_name, output_path_name)
@@ -216,7 +223,7 @@ if __name__ == "__main__":
                             base_name + '_segmentation.vtp')
             break
 
-        print(pyms3d.select_device())
+        #print(pyms3d.select_device())
 
         val = int(input("1. Display Persistence Curve\n"
                         "2. Compute initial Morse-Smale Complex\n"
