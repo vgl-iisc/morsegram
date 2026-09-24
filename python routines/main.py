@@ -63,12 +63,14 @@ def initial_msc(data_file_name, dim, msc_file_name, output_path_name):
         msc: initial msc
     '''
     print("Computing initial Morse-Smale Complex")
-
+    
+    msc = pyms3d.MsComplex()
+    
     if os.path.isfile(output_path_name+msc_file_name):
         msc.load(output_path_name+msc_file_name)
         return msc
+    
         # compute the mscomplex
-    msc = pyms3d.MsComplex()
         # compute the mscomplex from a structured grid with scalars
     msc.compute_bin(data_file_name, dim)
         # save the initial Morse-Smale complex
