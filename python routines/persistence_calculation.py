@@ -144,6 +144,6 @@ def get_knee_point(pers : list):
     plt.ylabel('Survived Critical Points')
     plt.title('Persistence Curve')
     # plt.show()
-    plt.savefig("../Outputs/pc_" + str(datetime.now()) + ".svg")
+    plt.savefig("../Outputs/pc_" + str(datetime.now()).replace(":","-") + ".svg")
 
     return kneedle.knee
