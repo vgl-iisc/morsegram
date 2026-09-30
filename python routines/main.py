@@ -67,7 +67,10 @@ def initial_msc(data_file_name, dim, msc_file_name, output_path_name):
     msc = pyms3d.MsComplex()
     
     if os.path.isfile(output_path_name+msc_file_name):
+        print(f"MS Complex found at : {output_path_name+msc_file_name}")
         msc.load(output_path_name+msc_file_name)
+        print(f"MS Complex loaded from : {output_path_name+msc_file_name}")
+        print("Computation Skipped")
         return msc
     
         # compute the mscomplex
