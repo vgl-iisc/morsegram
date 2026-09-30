@@ -115,7 +115,7 @@ Connectivity Network:
 
 ## MorseGramVis
 
-MorseGramVis is a visualisation tool for MorseGram. Installation and usage details can be found in the [repository](https://github.com/vgl-iisc/morsegram/tree/main/morsegramvis). 
+MorseGramVis is a visualization tool for MorseGram. Installation and usage details can be found in the [repository](https://github.com/vgl-iisc/morsegram/tree/main/morsegramvis). 
 
 # Copyright
 
