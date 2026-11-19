@@ -233,11 +233,15 @@ During the training process, the GNN model will learn to classify undersegmented
 - `requirements.txt` - List of dependencies
 - `setup.py` - Installation script
 
-## Development & Contribution
+## Development and Contribution
+
+MorseGramVis was developed in close collaboration with Manasa Bhat K.I. and Tejas G. Murthy, who specified the microstructural descriptors for particle morphology, fabric parameters, and analysis procedures.
+We welcome user contributions. If you are interested, do get in touch. 
 
 1. Fork the repository and create a new branch.
 2. Make your changes and commit them.
 3. Push to your fork and open a pull request.
+
 
 ## Contact
 
@@ -257,8 +261,9 @@ We will be happy to assist you!
 
 ## References:
 
-1. https://www.vtk.org
-2. https://p.yusukekamiyamane.com/
-3. https://icons8.com/icons
-4. https://sciviscolor.org/colormaps/
-5. https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/
+1. [MorseGramVis Software Page, VGL @ IISc](https://vgl.csa.iisc.ac.in/softwares.php?pid=017)
+2. https://www.vtk.org
+3. https://p.yusukekamiyamane.com/
+4. https://icons8.com/icons
+5. https://sciviscolor.org/colormaps/
+6. https://blog.streamlit.io/auto-generate-a-dataframe-filtering-ui-in-streamlit-with-filter_dataframe/
